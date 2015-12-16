@@ -1,0 +1,2 @@
+C:\Users\Elliott\Epitech\MyWindowsMediaPlayer\MyWindowsMediaPlayer\bin\Debug\MyWindowsMediaPlayer.exe.config
+C:\Users\Elliott\Epitech\MyWindowsMediaPlayer\bin\Debug\MyWindowsMediaPlayer.exe.config
