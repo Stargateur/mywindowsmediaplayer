@@ -60,7 +60,6 @@
     </ApplicationDefinition>
     <Compile Include="Model\XmlBDD.cs" />
     <Compile Include="Model\IBDD.cs" />
-    <Compile Include="Test\Class1.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -103,6 +102,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Test\" />
     <Folder Include="ViewModel\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

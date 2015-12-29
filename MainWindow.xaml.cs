@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyWindowsMediaPlayer.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,7 @@ namespace MyWindowsMediaPlayer
         public MainWindow()
         {
             InitializeComponent();
+            IBDD ibdd = new XmlBDD();
         }
     }
 }
