@@ -74,6 +74,15 @@ namespace MyWindowsMediaPlayer.Model
                     else
                         return 0;
                 });
+                xml.LinkList.Sort(delegate (Xml.Link a, Xml.Link b)
+                {
+                    if (a.IdMedia < b.IdMedia)
+                        return -1;
+                    else if (a.IdMedia > b.IdMedia)
+                        return 1;
+                    else
+                        return 0;
+                });
             }
             catch
             {
@@ -86,75 +95,162 @@ namespace MyWindowsMediaPlayer.Model
             xmlSerializer.Serialize(wfile, xml);
         }
 
-        public void AddMedia(string PathMedia)
+        public Int32 AddMedia(string PathMedia)
         {
             Int32 i = 0;
-
             while (i < xml.MediaList.Count())
             {
                 if (xml.MediaList[i].Path == PathMedia)
-                    return;
+                    return i;
                 if (xml.MediaList[i].Id != i)
                     break;
                 i++;
             }
-            while (i < xml.MediaList.Count())
-                if (xml.MediaList[i].Path == PathMedia)
-                    return;
+
+            Int32 j = i + 1;
+            while (j < xml.MediaList.Count())
+                if (xml.MediaList[j].Path == PathMedia)
+                    return j;
+                else
+                    j++;
+
             xml.MediaList.Insert(i, new Xml.Media(i, PathMedia));
+
+            return i;
         }
 
         public void AddMedia(string PathMedia, string NamePlaylist)
         {
-            throw new NotImplementedException();
+            Int32 idMedia = AddMedia(PathMedia);
+            Int32 idPlaylist = AddPlaylist(NamePlaylist);
+
+            Int32 i = 0;
+            while (i < xml.LinkList.Count())
+                if (idMedia >= xml.LinkList[i].IdMedia)
+                    break;
+                else
+                    i++;
+
+            Int32 j = i;
+            while (j < xml.LinkList.Count())
+                if (idMedia != xml.LinkList[j].IdMedia)
+                    break;
+                else if (idPlaylist == xml.LinkList[j].IdMedia)
+                    return;
+                else
+                    j++;
+
+            xml.LinkList.Insert(i, new Xml.Link(idMedia, idPlaylist));
         }
 
         public void AddMedia(List<string> PathMedia, string NamePlaylist)
         {
-            throw new NotImplementedException();
+            Int32 idPlaylist = AddPlaylist(NamePlaylist);
+
+            foreach (var pathMedia in PathMedia)
+            {
+                Start:
+                Int32 idMedia = AddMedia(pathMedia);
+
+                Int32 i = 0;
+                while (i < xml.LinkList.Count())
+                    if (idMedia >= xml.LinkList[i].IdMedia)
+                        break;
+                    else
+                        i++;
+
+                Int32 j = i;
+                while (j < xml.LinkList.Count())
+                    if (idMedia != xml.LinkList[j].IdMedia)
+                        break;
+                    else if (idPlaylist == xml.LinkList[j].IdMedia)
+                        goto Start;
+                    else
+                        j++;
+
+                xml.LinkList.Insert(i, new Xml.Link(idMedia, idPlaylist));
+            }
         }
 
-        public void AddPlaylist(string NamePlaylist)
+        public Int32 AddPlaylist(string NamePlaylist)
         {
             Int32 i = 0;
 
             while (i < xml.PlaylistList.Count())
             {
                 if (xml.PlaylistList[i].Name == NamePlaylist)
-                    return;
+                    return i;
                 if (xml.PlaylistList[i].Id != i)
                     break;
                 i++;
             }
-            while (i < xml.PlaylistList.Count())
-                if (xml.PlaylistList[i].Name == NamePlaylist)
-                    return;
+
+            Int32 j = i + 1;
+            while (j < xml.PlaylistList.Count())
+                if (xml.PlaylistList[j].Name == NamePlaylist)
+                    return j;
+                else
+                    j++;
+
             xml.PlaylistList.Insert(i, new Xml.Playlist(i, NamePlaylist));
+
+            return i;
         }
 
         public void AddPlaylist(string NamePlaylist, string PathMedia)
         {
-            throw new NotImplementedException();
+            AddMedia(PathMedia, NamePlaylist);
         }
 
         public void AddPlaylist(string NamePlaylist, List<string> PathMedia)
         {
-            throw new NotImplementedException();
+            AddMedia(PathMedia, NamePlaylist);
         }
 
         public void DeleteMedia(string PathMedia)
         {
-            throw new NotImplementedException();
+            Int32 i = 0;
+            while (i < xml.MediaList.Count())
+                if (xml.MediaList[i].Path == PathMedia)
+                {
+                    Int32 j = 0;
+                    while (j < xml.LinkList.Count())
+                        if (xml.LinkList[j].IdMedia == xml.MediaList[i].Id)
+                            xml.LinkList.RemoveAt(j);
+                        else
+                            j++;
+                    xml.MediaList.RemoveAt(i);
+                    return;
+                }
+                else
+                    i++;
         }
 
         public void DeletePlaylist(string NamePlaylist)
         {
-            throw new NotImplementedException();
+            Int32 i = 0;
+            while (i < xml.PlaylistList.Count())
+                if (xml.PlaylistList[i].Name == NamePlaylist)
+                {
+                    Int32 j = 0;
+                    while (j < xml.LinkList.Count())
+                        if (xml.LinkList[j].IdPlaylist == xml.PlaylistList[i].Id)
+                            xml.LinkList.RemoveAt(j);
+                        else
+                            j++;
+                    xml.PlaylistList.RemoveAt(i);
+                    return;
+                }
+                else
+                    i++;
         }
 
         public List<string> GetPlaylist()
         {
-            throw new NotImplementedException();
+            var result = new List<String>();
+            foreach (var playlist in xml.PlaylistList)
+                result.Add(playlist.Name);
+            return result;
         }
 
         public List<string> GetMedia()
@@ -171,12 +267,20 @@ namespace MyWindowsMediaPlayer.Model
             foreach (var playlist in xml.PlaylistList)
                 if (playlist.Name == NamePlaylist)
                 {
-                    var i = new List<Int64>();
+                    Int32 i = 0;
                     foreach (var link in xml.LinkList)
-                        if (link.Playlist == playlist.Id)
-                            i.Add(link.Media);
-                    foreach (var media in xml.MediaList)
-                        if (media.Id == )
+                        if (link.IdPlaylist == playlist.Id)
+                            while (i < xml.MediaList.Count())
+                            {
+                                if (link.IdMedia < xml.MediaList[i].Id)
+                                {
+                                    i++;
+                                    continue;
+                                }
+                                if (link.IdMedia == xml.MediaList[i].Id)
+                                    result.Add(xml.MediaList[i].Path);
+                                break;
+                            }
                     break;
                 }
             return result;
@@ -186,6 +290,8 @@ namespace MyWindowsMediaPlayer.Model
         {
             public class Media
             {
+                public Media()
+                { }
                 public Media(Int32 Id, String Path)
                 {
                     this.Id = Id;
@@ -197,6 +303,8 @@ namespace MyWindowsMediaPlayer.Model
             public List<Media> MediaList;
             public class Playlist
             {
+                public Playlist()
+                { }
                 public Playlist(Int32 Id, String Name)
                 {
                     this.Id = Id;
@@ -208,13 +316,15 @@ namespace MyWindowsMediaPlayer.Model
             public List<Playlist> PlaylistList;
             public class Link
             {
-                public Link(Int32 Media, Int32 Playlist)
+                public Link()
+                { }
+                public Link(Int32 IdMedia, Int32 IdPlaylist)
                 {
-                    this.Media = Media;
-                    this.Playlist = Playlist;
+                    this.IdMedia = IdMedia;
+                    this.IdPlaylist = IdPlaylist;
                 }
-                public Int32 Media;
-                public Int32 Playlist;
+                public Int32 IdMedia;
+                public Int32 IdPlaylist;
             }
             public List<Link> LinkList;
         }

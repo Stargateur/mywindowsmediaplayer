@@ -13,11 +13,11 @@ namespace MyWindowsMediaPlayer.Model
             get;
             set;
         }
-        void AddPlaylist(String NamePlaylist);
+        Int32 AddPlaylist(String NamePlaylist);
         void AddPlaylist(String NamePlaylist, String PathMedia);
         void AddPlaylist(String NamePlaylist, List<String> PathMedia);
         void DeletePlaylist(String NamePlaylist);
-        void AddMedia(String PathMedia);
+        Int32 AddMedia(String PathMedia);
         void AddMedia(String PathMedia, String NamePlaylist);
         void AddMedia(List<String> PathMedia, String NamePlaylist);
         void DeleteMedia(String PathMedia);
