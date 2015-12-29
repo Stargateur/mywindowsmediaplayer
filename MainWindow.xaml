@@ -4,9 +4,62 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyWindowsMediaPlayer"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+        Title="MyWindowsMediaPlayerV2" Height="900" Width="1200" WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <System:Double x:Key="MenuWidth">200</System:Double>
+        <System:Double x:Key="BottomMenuHeight">40</System:Double>
+        <System:Double x:Key="ButtonHeight">35</System:Double>
+    </Window.Resources>
+
+    <DockPanel LastChildFill="True">
+        <Border DockPanel.Dock="Left" Background="AliceBlue" Width="{StaticResource MenuWidth}" Visibility="{Binding Path=isMenuShown, Converter={StaticResource BoolToVis}}">
+            <DockPanel LastChildFill="True">
+                <Border DockPanel.Dock="Bottom" Height="{StaticResource BottomMenuHeight}">
+                    <TextBlock Name="txtblc_filename" Text="" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="WrapWithOverflow">
+                    </TextBlock>
+                </Border>
+                <Border>
+                    <StackPanel Orientation="Vertical">
+                        <Button Name="btn_select_file" Height="{StaticResource ButtonHeight}">Lire...</Button>
+                        <Button Height="{StaticResource ButtonHeight}">Lecture en cours</Button>
+                        <Button Height="{StaticResource ButtonHeight}">Playlists</Button>
+                    </StackPanel>
+                </Border>
+            </DockPanel>
+        </Border>
+        <Border DockPanel.Dock="Bottom" Background="OrangeRed" Opacity="0.8">
+            <Grid Name="songControls" Height="{StaticResource BottomMenuHeight}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.5*" />
+                    <ColumnDefinition Width="4*" />
+                    <ColumnDefinition Width="0.5*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <Label Name="lbl_current_time" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">0:00</Label>
+                <Slider Name="sldr_media_progress" Grid.Column="1" Minimum="0" Maximum="1" Value="0" IsEnabled="False" VerticalAlignment="Center"></Slider>
+                <Label Name="lbl_total_time" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">0:00</Label>
+                <Button Grid.Column="3">Précédent</Button>
+                <Button Name="btn_play" Grid.Column="4" Click="btn_play_Click">Play</Button>
+                <Button Grid.Column="5">Suivant</Button>
+                <Slider Name="sldr_volume" Grid.Column="6" Minimum="0" Maximum="1" TickFrequency="0.01" Value="1" VerticalAlignment="Center"></Slider>
+            </Grid>
+        </Border>
+        <Border BorderThickness="1">
+            <Grid>
+                <Grid HorizontalAlignment="Center" Name="pnl_audio" Visibility="Collapsed">
+                    <Image Source="C:\Users\Elliott\Documents\Visual Studio 2015\Projects\EpitechTP\MyWindowsMediaPlayerV2\Resources\song.gif" Stretch="None" HorizontalAlignment="Center"></Image>
+                </Grid>
+                <Grid Name="pnl_video" Visibility="Visible">
+                    <MediaElement Name="player"></MediaElement>
+                </Grid>
+            </Grid>
+        </Border>
+    </DockPanel>
 </Window>
