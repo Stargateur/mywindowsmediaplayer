@@ -23,7 +23,6 @@ namespace MyWindowsMediaPlayer
         public MainWindow()
         {
             InitializeComponent();
-            var test = new Model.Media("C:/Users/Elliott/Music/Am I Wrong.mp3");
         }
     }
 }
