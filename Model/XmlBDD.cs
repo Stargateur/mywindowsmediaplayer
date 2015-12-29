@@ -52,9 +52,9 @@ namespace MyWindowsMediaPlayer.Model
 
         private void load()
         {
+            var rfile = new System.IO.FileStream(Path, System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.Read);
             try
             {
-                var rfile = new System.IO.FileStream(Path, System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.Read);
                 xml = (XmlBDD.Xml)xmlSerializer.Deserialize(rfile);
                 xml.MediaList.Sort(delegate (Xml.Media a, Xml.Media b)
                 {
@@ -87,12 +87,17 @@ namespace MyWindowsMediaPlayer.Model
             catch
             {
                 xml = new XmlBDD.Xml();
+                xml.MediaList = new List<Xml.Media>();
+                xml.PlaylistList = new List<Xml.Playlist>();
+                xml.LinkList = new List<Xml.Link>();
             }
+            rfile.Close();
         }
         private void save()
         {
-            var wfile = new System.IO.FileStream(Path, System.IO.FileMode.Open, System.IO.FileAccess.Write);
+            var wfile = new System.IO.FileStream(Path, System.IO.FileMode.Truncate, System.IO.FileAccess.Write);
             xmlSerializer.Serialize(wfile, xml);
+            wfile.Close();
         }
 
         public Int32 AddMedia(string PathMedia)
@@ -288,6 +293,8 @@ namespace MyWindowsMediaPlayer.Model
 
         public class Xml
         {
+            public Xml()
+            { }
             public class Media
             {
                 public Media()

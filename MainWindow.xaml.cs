@@ -27,6 +27,9 @@ namespace MyWindowsMediaPlayer
         {
             InitializeComponent();
             IBDD ibdd = new XmlBDD();
+            ibdd.AddMedia("lol");
+            ibdd.AddPlaylist("pd");
+            ibdd.AddMedia("lol", "pd");
             this.DataContext = MediatechViewModel;
         }
 
