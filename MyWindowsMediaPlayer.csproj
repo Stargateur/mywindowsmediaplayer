@@ -58,6 +58,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModel\MediatechViewModel.cs" />
     <Compile Include="Model\XmlBDD.cs" />
     <Compile Include="Model\IBDD.cs" />
     <Page Include="MainWindow.xaml">
@@ -75,6 +76,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\Media.cs" />
+    <Compile Include="Model\Mediatech.cs" />
+    <Compile Include="Model\Playlist.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

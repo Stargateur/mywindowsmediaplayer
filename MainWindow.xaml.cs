@@ -21,10 +21,19 @@ namespace MyWindowsMediaPlayer
     /// </summary>
     public partial class MainWindow : Window
     {
+        ViewModel.MediatechViewModel MediatechViewModel = new ViewModel.MediatechViewModel();
+
         public MainWindow()
         {
             InitializeComponent();
             IBDD ibdd = new XmlBDD();
+            this.DataContext = MediatechViewModel;
+        }
+
+        private void btn_play_Click(object sender, RoutedEventArgs e)
+        {
+            MediatechViewModel.isMenuShown = !MediatechViewModel.isMenuShown;
+            //MessageBox.Show("new menu state: " + MediatechViewModel.isMenuShown.ToString());
         }
     }
 }
