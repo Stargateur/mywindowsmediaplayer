@@ -21,7 +21,7 @@ namespace MyWindowsMediaPlayer
     /// </summary>
     public partial class MainWindow : Window
     {
-        ViewModel.MediatechViewModel MediatechViewModel = new ViewModel.MediatechViewModel();
+        ViewModel.MediatechViewModel MediatechViewModel;
 
         public MainWindow()
         {
@@ -30,6 +30,8 @@ namespace MyWindowsMediaPlayer
             ibdd.AddMedia("lol");
             ibdd.AddPlaylist("pd");
             ibdd.AddMedia("lol", "pd");
+            MediatechViewModel = new ViewModel.MediatechViewModel();
+            MessageBox.Show(MediatechViewModel.Medias);
             this.DataContext = MediatechViewModel;
         }
 

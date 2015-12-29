@@ -9,7 +9,7 @@ namespace MyWindowsMediaPlayer.Model
     public class Mediatech
     {
         Playlist Running = new Playlist("Running");
-        List<Media> Medias = new List<Media>();
+        public List<Media> Medias = new List<Media>();
         List<Playlist> Playlists = new List<Playlist>();
         IBDD bdd = new XmlBDD();
 
