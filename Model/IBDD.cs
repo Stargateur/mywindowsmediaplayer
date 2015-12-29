@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyWindowsMediaPlayer.Model
 {
-    interface IBDD
+    public interface IBDD
     {
         String Path
         {
