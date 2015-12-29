@@ -8,10 +8,7 @@ using System.Windows;
 
 namespace MyWindowsMediaPlayer.Model
 {
-    /// <summary>
-    /// Représentation d'un média dans la médiatech
-    /// </summary>
-    class Media
+    public class Media
     {
         static Dictionary<String, bool> mediaExtensions = new Dictionary<string, bool>() {
             { ".WAV", true }, { ".MID", true }, { ".MIDI", true }, { ".WMA", true }, { ".MP3", true }, { ".OGG", true }, { ".RMA", true },

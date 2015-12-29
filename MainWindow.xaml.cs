@@ -21,12 +21,14 @@ namespace MyWindowsMediaPlayer
     /// </summary>
     public partial class MainWindow : Window
     {
-        ViewModel.MediatechViewModel MediatechViewModel = new ViewModel.MediatechViewModel();
+        ViewModel.MediatechViewModel MediatechViewModel;
 
         public MainWindow()
         {
             InitializeComponent();
 
+            MediatechViewModel = new ViewModel.MediatechViewModel();
+            MessageBox.Show(MediatechViewModel.Medias);
             this.DataContext = MediatechViewModel;
         }
 

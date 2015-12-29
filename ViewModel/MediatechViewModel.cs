@@ -29,6 +29,18 @@ namespace MyWindowsMediaPlayer.ViewModel
             get { return mediatech.isFullScreen; }
             set { mediatech.isFullScreen = value; RaisePropertyChanged("isFullScreen"); }
         }
+        public String Medias
+        {
+            get
+            {
+                String medias = "";
+                foreach (var media in mediatech.Medias)
+                {
+                    medias = medias + media.Title;
+                }
+                return medias;
+            }
+        }
         #endregion
 
         public MediatechViewModel()
