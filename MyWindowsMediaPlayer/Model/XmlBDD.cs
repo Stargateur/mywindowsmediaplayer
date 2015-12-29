@@ -131,7 +131,7 @@ namespace MyWindowsMediaPlayer.Model
 
             Int32 i = 0;
             while (i < xml.LinkList.Count())
-                if (idMedia >= xml.LinkList[i].IdMedia)
+                if (idMedia <= xml.LinkList[i].IdMedia)
                     break;
                 else
                     i++;
@@ -140,7 +140,7 @@ namespace MyWindowsMediaPlayer.Model
             while (j < xml.LinkList.Count())
                 if (idMedia != xml.LinkList[j].IdMedia)
                     break;
-                else if (idPlaylist == xml.LinkList[j].IdMedia)
+                else if (idPlaylist == xml.LinkList[j].IdPlaylist)
                     return;
                 else
                     j++;
@@ -154,12 +154,11 @@ namespace MyWindowsMediaPlayer.Model
 
             foreach (var pathMedia in PathMedia)
             {
-                Start:
                 Int32 idMedia = AddMedia(pathMedia);
 
                 Int32 i = 0;
                 while (i < xml.LinkList.Count())
-                    if (idMedia >= xml.LinkList[i].IdMedia)
+                    if (idMedia <= xml.LinkList[i].IdMedia)
                         break;
                     else
                         i++;
@@ -168,12 +167,13 @@ namespace MyWindowsMediaPlayer.Model
                 while (j < xml.LinkList.Count())
                     if (idMedia != xml.LinkList[j].IdMedia)
                         break;
-                    else if (idPlaylist == xml.LinkList[j].IdMedia)
-                        goto Start;
+                    else if (idPlaylist == xml.LinkList[j].IdPlaylist)
+                        goto noInsert;
                     else
                         j++;
 
                 xml.LinkList.Insert(i, new Xml.Link(idMedia, idPlaylist));
+                noInsert:;
             }
         }
 
