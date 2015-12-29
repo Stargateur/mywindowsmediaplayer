@@ -59,6 +59,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ViewModel\MediatechViewModel.cs" />
+    <Compile Include="Model\XmlBDD.cs" />
+    <Compile Include="Model\IBDD.cs" />
+    <Compile Include="Test\Class1.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -104,6 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Test\" />
+    <Folder Include="ViewModel\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
