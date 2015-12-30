@@ -6,34 +6,69 @@ using System.Threading.Tasks;
 
 namespace MyWindowsMediaPlayer.Model
 {
+    /// <summary>
+    /// Inprémentation de IBDD avec un fichier Xml
+    /// </summary>
     public class XmlBDD : IBDD
     {
-        private System.Xml.Serialization.XmlSerializer xmlSerializer;
+        /// <summary>
+        /// Sert à serialiser/déserialiser le Xml en se servant d'un stream et de la class Xml
+        /// </summary>
+        private System.Xml.Serialization.XmlSerializer xmlSerializer =
+            new System.Xml.Serialization.XmlSerializer(typeof(XmlBDD.Xml));
+
+        /// <summary>
+        /// xml contiendra la BDD
+        /// </summary>
         private XmlBDD.Xml xml;
+
+        /// <summary>
+        /// Path du fichier Xml pour charger et sauvegarder
+        /// </summary>
         private String path;
 
+        /// <summary>
+        /// Instancie un nouvel objet de la classe XmlBDD ayant pour path %AppData%/%NameProject%/%NameProject%.xml
+        /// </summary>
         public XmlBDD()
         {
-            xmlSerializer = new System.Xml.Serialization.XmlSerializer(typeof(XmlBDD.Xml));
-            String applicationDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            String myWindowsMediaPlayer = System.IO.Path.Combine(applicationDataFolder, System.Reflection.Assembly.GetCallingAssembly().GetName().Name);
+            String applicationDataFolder =
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+
+            String myWindowsMediaPlayer =
+                System.IO.Path.Combine(applicationDataFolder,
+                System.Reflection.Assembly.GetCallingAssembly().GetName().Name);
+
             System.IO.Directory.CreateDirectory(myWindowsMediaPlayer);
-            path = System.IO.Path.Combine(myWindowsMediaPlayer, System.Reflection.Assembly.GetCallingAssembly().GetName().Name + ".xml");
+
+            path = System.IO.Path.Combine(myWindowsMediaPlayer,
+                System.Reflection.Assembly.GetCallingAssembly().GetName().Name + ".xml");
+
             load();
         }
 
+        /// <summary>
+        /// Instancie un nouvel objet de la classe XmlBDD
+        /// </summary>
+        /// <param name="XmlPath">Path pour charger/sauvegarder le xml</param>
         public XmlBDD(String XmlPath)
         {
-            xmlSerializer = new System.Xml.Serialization.XmlSerializer(typeof(XmlBDD.Xml));
             path = XmlPath;
+
             load();
         }
 
+        /// <summary>
+        /// Détruit un nouvel objet de la classe XmlBDD, necéssaire pour sauvegarder
+        /// </summary>
         ~XmlBDD()
         {
             save();
         }
 
+        /// <summary>
+        /// En utilisant path comme chemin d'acces charge le fichier Xml dans la variable xml
+        /// </summary>
         private void load()
         {
             var rfile = new System.IO.FileStream(path, System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.Read);
@@ -74,6 +109,10 @@ namespace MyWindowsMediaPlayer.Model
             }
             rfile.Close();
         }
+
+        /// <summary>
+        /// En utilisant path comme chemin d'acces sauvegarde la variable xml dans le fichier Xml
+        /// </summary>
         private void save()
         {
             var wfile = new System.IO.FileStream(path, System.IO.FileMode.Truncate, System.IO.FileAccess.Write);
@@ -81,6 +120,10 @@ namespace MyWindowsMediaPlayer.Model
             wfile.Close();
         }
 
+        /// <summary>
+        /// Renvoie l'id du media en paramètre, si le media n'est pas présent il est créer
+        /// </summary>
+        /// <param name="PathMedia">Path du media</param>
         private Int32 GetIdMedia(string PathMedia)
         {
             Int32 i = 0;
@@ -105,11 +148,20 @@ namespace MyWindowsMediaPlayer.Model
             return i;
         }
 
+        /// <summary>
+        /// Ajouter un media à la BDD, si le media est déjà présent ne fait rien
+        /// </summary>
+        /// <param name="PathMedia">Path du media à ajouter</param>
         public void AddMedia(string PathMedia)
         {
             GetIdMedia(PathMedia);
         }
 
+        /// <summary>
+        /// Ajoute un lien entre un media et une playlist, si le lien existe déjà ne fais rien
+        /// </summary>
+        /// <param name="idMedia">Id du media</param>
+        /// <param name="idPlaylist">Id de la playlist</param>
         private void AddLink(Int32 idMedia, Int32 idPlaylist)
         {
             Int32 i = 0;
@@ -131,6 +183,11 @@ namespace MyWindowsMediaPlayer.Model
             xml.LinkList.Insert(i, new Xml.Link(idMedia, idPlaylist));
         }
 
+        /// <summary>
+        /// Ajoute le media à la playlist, si le media ou la playlist n'existe pas ils sont créés
+        /// </summary>
+        /// <param name="PathMedia">Path du media</param>
+        /// <param name="NamePlaylist">Nom de la playlist</param>
         public void AddMedia(string PathMedia, string NamePlaylist)
         {
             Int32 idMedia = GetIdMedia(PathMedia);
@@ -139,6 +196,11 @@ namespace MyWindowsMediaPlayer.Model
             AddLink(idMedia, idPlaylist);
         }
 
+        /// <summary>
+        /// Ajoute la liste de media à la playlist, si les medias ou la playlist n'existe pas ils sont créés
+        /// </summary>
+        /// <param name="PathMedia">Liste de path des medias</param>
+        /// <param name="NamePlaylist">Nom de la playlist</param>
         public void AddMedia(List<string> PathMedia, string NamePlaylist)
         {
             Int32 idPlaylist = GetIdPlaylist(NamePlaylist);
@@ -151,6 +213,10 @@ namespace MyWindowsMediaPlayer.Model
             }
         }
 
+        /// <summary>
+        /// Renvoie l'id de la playlist en paramètre, si la playlist n'est pas présente elle est créé
+        /// </summary>
+        /// <param name="NamePlaylist">Nom de la playlist</param>
         private Int32 GetIdPlaylist(string NamePlaylist)
         {
             Int32 i = 0;
@@ -176,21 +242,39 @@ namespace MyWindowsMediaPlayer.Model
             return i;
         }
 
+        /// <summary>
+        /// Ajoute la playlist, si la playlist existe ne fais rien
+        /// </summary>
+        /// <param name="NamePlaylist">Nom de la playlist</param>
         public void AddPlaylist(string NamePlaylist)
         {
             GetIdPlaylist(NamePlaylist);
         }
 
+        /// <summary>
+        /// Ajoute la playlist et insert le media dedans, si la playlist ou le media n'existent pas ils sont créés
+        /// </summary>
+        /// <param name="NamePlaylist">Nom de la playlist</param>
+        /// <param name="PathMedia">Path du media</param>
         public void AddPlaylist(string NamePlaylist, string PathMedia)
         {
             AddMedia(PathMedia, NamePlaylist);
         }
 
+        /// <summary>
+        /// Ajoute la playlist et insert les medias dedans, si la playlist ou les medias n'existe pas ils sont créés
+        /// </summary>
+        /// <param name="NamePlaylist">Nom de la playlist</param>
+        /// <param name="PathMedia">Liste de path des medias</param>
         public void AddPlaylist(string NamePlaylist, List<string> PathMedia)
         {
             AddMedia(PathMedia, NamePlaylist);
         }
 
+        /// <summary>
+        /// Destruit le media dans la BDD, si il n'existe pas ne fais rien
+        /// </summary>
+        /// <param name="PathMedia">Path du media</param>
         public void DeleteMedia(string PathMedia)
         {
             Int32 i = 0;
@@ -210,6 +294,10 @@ namespace MyWindowsMediaPlayer.Model
                     i++;
         }
 
+        /// <summary>
+        /// Destruit la playlist dans la BDD, si il n'existe pas ne fais rien
+        /// </summary>
+        /// <param name="NamePlaylist">Nom de la playlist</param>
         public void DeletePlaylist(string NamePlaylist)
         {
             Int32 i = 0;
@@ -229,6 +317,10 @@ namespace MyWindowsMediaPlayer.Model
                     i++;
         }
 
+        /// <summary>
+        /// Renvoie la liste de toute les playlists de la BDD
+        /// </summary>
+        /// <returns>Liste de nom des playlists</returns>
         public List<string> GetPlaylist()
         {
             var result = new List<String>();
@@ -237,6 +329,10 @@ namespace MyWindowsMediaPlayer.Model
             return result;
         }
 
+        /// <summary>
+        /// Renvoie la liste de tout les medias de la BDD
+        /// </summary>
+        /// <returns>Liste de path des medias</returns>
         public List<string> GetMedia()
         {
             var result = new List<String>();
@@ -245,6 +341,11 @@ namespace MyWindowsMediaPlayer.Model
             return result;
         }
 
+        /// <summary>
+        /// Renvoie la liste des medias d'une playlist, si elle n'existe pas la liste est vide
+        /// </summary>
+        /// <param name="NamePlaylist">Nom de la playlist</param>
+        /// <returns>Liste de path des medias</returns>
         public List<string> GetMedia(string NamePlaylist)
         {
             var result = new List<String>();
@@ -270,55 +371,136 @@ namespace MyWindowsMediaPlayer.Model
             return result;
         }
 
+        /// <summary>
+        /// Class pour stocker les informations de la BDD
+        /// </summary>
         public class Xml
         {
+            /// <summary>
+            /// Instancie tout les membres de la classe
+            /// </summary>
             public Xml()
             {
                 MediaList = new List<Xml.Media>();
                 PlaylistList = new List<Xml.Playlist>();
                 LinkList = new List<Xml.Link>();
             }
+
+            /// <summary>
+            /// Classe pour stocker un Media
+            /// </summary>
             public class Media
             {
+                /// <summary>
+                /// Instancie tout les membres de la classe
+                /// </summary>
                 public Media() :
                     this(0, "")
                 { }
+
+                /// <summary>
+                /// Instancie la classe
+                /// </summary>
+                /// <param name="Id">Id du media</param>
+                /// <param name="Path">Path du media</param>
                 public Media(Int32 Id, String Path)
                 {
                     this.Id = Id;
                     this.Path = Path;
                 }
+
+                /// <summary>
+                /// Id doit être unique dans la BDD
+                /// </summary>
                 public Int32 Id;
+
+                /// <summary>
+                /// Path du fichier media
+                /// </summary>
                 public String Path;
             }
+
+            /// <summary>
+            /// Liste des medias dans la BDD
+            /// </summary>
             public List<Media> MediaList;
+
+            /// <summary>
+            /// Classe pour stocker une PLaylist
+            /// </summary>
             public class Playlist
             {
+                /// <summary>
+                /// Instancie tout les membres de la classe
+                /// </summary>
                 public Playlist() :
                     this(0, "")
                 { }
+
+                /// <summary>
+                /// Instancie la class
+                /// </summary>
+                /// <param name="Id">Id de la playlist</param>
+                /// <param name="Name">Nom de la playlist</param>
                 public Playlist(Int32 Id, String Name)
                 {
                     this.Id = Id;
                     this.Name = Name;
                 }
+
+                /// <summary>
+                /// Id de la playlist doit être unique
+                /// </summary>
                 public Int32 Id;
+
+                /// <summary>
+                /// Nom de la playlist
+                /// </summary>
                 public String Name;
             }
+
+            /// <summary>
+            /// Liste des playlist dans la BDD
+            /// </summary>
             public List<Playlist> PlaylistList;
+
+            /// <summary>
+            /// Classe pour représenter le lien entre un media et une playlist
+            /// </summary>
             public class Link
             {
+                /// <summary>
+                /// Instancie tout les membres de la classe
+                /// </summary>
                 public Link() :
                     this(0, 0)
                 { }
+
+                /// <summary>
+                /// Intancie la classe
+                /// </summary>
+                /// <param name="IdMedia">Id du media</param>
+                /// <param name="IdPlaylist">Id de la playlist</param>
                 public Link(Int32 IdMedia, Int32 IdPlaylist)
                 {
                     this.IdMedia = IdMedia;
                     this.IdPlaylist = IdPlaylist;
                 }
+
+                /// <summary>
+                /// Id du media
+                /// </summary>
                 public Int32 IdMedia;
+
+                /// <summary>
+                /// Id de la playlist
+                /// </summary>
                 public Int32 IdPlaylist;
             }
+
+            /// <summary>
+            /// Liste des liens dans la BDD
+            /// </summary>
             public List<Link> LinkList;
         }
     }
