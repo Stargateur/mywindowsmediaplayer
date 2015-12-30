@@ -13,5 +13,10 @@ namespace MyWindowsMediaPlayer
     /// </summary>
     public partial class App : Application
     {
+
+        App()
+        {
+            this.ShutdownMode = ShutdownMode.OnMainWindowClose;
+        }
     }
 }

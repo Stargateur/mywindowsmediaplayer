@@ -56,10 +56,5 @@ namespace MyWindowsMediaPlayer
             Model.Playlist selection = (Model.Playlist)lbox.SelectedItem;
             this.pnl_medias.DataContext = new ViewModel.PlaylistViewModel(selection);
         }
-
-        private void close_log(object sender, EventArgs e)
-        {
-            log.LogWindow.closeLog();
-        }
     }
 }

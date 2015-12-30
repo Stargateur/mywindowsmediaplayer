@@ -29,11 +29,5 @@ namespace MyWindowsMediaPlayer
             this.debug.Text += log + "\n";
             this.Show();
         }
-
-        public void closeLog()
-        {
-            if (logWindow != null)
-                logWindow.Close();
-        }
     }
 }
