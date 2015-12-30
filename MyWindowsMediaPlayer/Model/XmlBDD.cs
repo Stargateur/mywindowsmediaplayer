@@ -247,6 +247,8 @@ namespace MyWindowsMediaPlayer.Model
         /// <param name="PathMedia">Path du media</param>
         private Int32 GetIdMedia(string PathMedia)
         {
+            PathMedia = System.IO.Path.GetFullPath(PathMedia);
+
             Int32 i = 0;
             while (i < xml.MediaList.Count())
             {
