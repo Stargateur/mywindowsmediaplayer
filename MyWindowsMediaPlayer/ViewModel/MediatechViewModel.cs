@@ -36,7 +36,7 @@ namespace MyWindowsMediaPlayer.ViewModel
                 String medias = "";
                 foreach (var media in mediatech.Medias)
                 {
-                    medias = medias + media.Title;
+                    medias = medias + "\n" + media.Title + ".";
                 }
                 return medias;
             }

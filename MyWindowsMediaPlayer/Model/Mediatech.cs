@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace MyWindowsMediaPlayer.Model
 {
@@ -19,9 +20,12 @@ namespace MyWindowsMediaPlayer.Model
 
         public Mediatech()
         {
+            bdd.AddMedia(System.IO.Path.GetFullPath(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), @"..\..\..\Music\allies_music1.mp3"))); // DEBUG
             var paths = bdd.GetMedia();
+            MessageBox.Show(paths.First());
             foreach (string path in paths)
             {
+                System.Diagnostics.Debug.WriteLine("Addind " + path + " Media object");
                 var media = new Media(path);
                 Medias.Add(media);
             }

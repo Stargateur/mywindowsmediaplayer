@@ -26,7 +26,6 @@ namespace MyWindowsMediaPlayer
         public MainWindow()
         {
             InitializeComponent();
-
             MediatechViewModel = new ViewModel.MediatechViewModel();
             MessageBox.Show(MediatechViewModel.Medias);
             this.DataContext = MediatechViewModel;
