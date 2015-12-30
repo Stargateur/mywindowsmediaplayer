@@ -1,16 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace MyWindowsMediaPlayer
 {
@@ -29,7 +18,7 @@ namespace MyWindowsMediaPlayer
             }
         }
 
-        public log()
+        private log()
         {
             InitializeComponent();
             this.Show();
@@ -38,6 +27,7 @@ namespace MyWindowsMediaPlayer
         public void appendLog(String log)
         {
             this.debug.Text = this.debug.Text += "\n" + log;
+            this.Show();
         }
 
         public void closeLog()

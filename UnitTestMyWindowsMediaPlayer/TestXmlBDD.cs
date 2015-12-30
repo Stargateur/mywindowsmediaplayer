@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MyWindowsMediaPlayer.Model;
-using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 
