@@ -70,6 +70,105 @@ namespace MyWindowsMediaPlayer.Model
         }
 
         /// <summary>
+        /// Destruis les liens en double, et les liens qui relie mêne vers des medias qui n'existe pas
+        /// ou vers des playlists qui n'existe pas
+        /// </summary>
+        public void FixLink()
+        {
+            Int32 i = 0;
+            Int32 j = 0;
+            while (i < xml.LinkList.Count() && j < xml.MediaList.Count())
+            {
+                if (xml.MediaList[j].Id < xml.LinkList[i].IdMedia)
+                {
+                    j++;
+                    continue;
+                }
+                else if (xml.MediaList[j].Id > xml.LinkList[i].IdMedia)
+                    xml.LinkList.RemoveAt(i);
+                else
+                {
+                    Int32 tmpI = i + 1;
+                    while (tmpI < xml.LinkList.Count())
+                        if (xml.LinkList[tmpI].IdMedia != xml.LinkList[i].IdMedia)
+                            break;
+                        else if (xml.LinkList[tmpI].IdPlaylist == xml.LinkList[i].IdPlaylist)
+                            xml.LinkList.RemoveAt(tmpI);
+                        else
+                            tmpI++;
+                    Int32 k = 0;
+                    while (k < xml.PlaylistList.Count())
+                    {
+                        if (xml.PlaylistList[k].Id < xml.LinkList[i].IdPlaylist)
+                        {
+                            k++;
+                            continue;
+                        }
+                        else if (xml.PlaylistList[k].Id > xml.LinkList[i].IdPlaylist)
+                            xml.LinkList.RemoveAt(i);
+                        else
+                            i++;
+                        break;
+                    }
+                }
+            }
+            while (i < xml.LinkList.Count())
+                xml.LinkList.RemoveAt(i);
+        }
+
+        /// <summary>
+        /// Détruit les medias en doublons et les medias qui ont le même Id
+        /// </summary>
+        private void FixMedia()
+        {
+            Int32 i = 0;
+            while (i < xml.MediaList.Count())
+            {
+                Int32 j = i + 1;
+                while (j < xml.MediaList.Count())
+                    if (xml.MediaList[j].Id == xml.MediaList[i].Id)
+                        xml.MediaList.RemoveAt(j);
+                    else if (xml.MediaList[j].Path == xml.MediaList[i].Path)
+                    {
+                        Int32 k = 0;
+                        while (k < xml.LinkList.Count())
+                            if (xml.LinkList[k].IdMedia == xml.MediaList[j].Id)
+                                xml.LinkList[k].IdMedia = xml.MediaList[i].Id;
+                        xml.MediaList.RemoveAt(j);
+                    }
+                    else
+                        j++;
+                i++;
+            }
+        }
+
+        /// <summary>
+        /// Détruit les playlists en doublons et les medias qui ont le même Id
+        /// </summary>
+        private void FixPlaylist()
+        {
+            Int32 i = 0;
+            while (i < xml.PlaylistList.Count())
+            {
+                Int32 j = i + 1;
+                while (j < xml.PlaylistList.Count())
+                    if (xml.PlaylistList[j].Id == xml.PlaylistList[i].Id)
+                        xml.PlaylistList.RemoveAt(j);
+                    else if (xml.PlaylistList[j].Name == xml.PlaylistList[i].Name)
+                    {
+                        Int32 k = 0;
+                        while (k < xml.LinkList.Count())
+                            if (xml.LinkList[k].IdPlaylist == xml.PlaylistList[j].Id)
+                                xml.LinkList[k].IdPlaylist = xml.PlaylistList[i].Id;
+                        xml.PlaylistList.RemoveAt(j);
+                    }
+                    else
+                        j++;
+                i++;
+            }
+        }
+
+        /// <summary>
         /// En utilisant path comme chemin d'acces charge le fichier Xml dans la variable xml
         /// </summary>
         private void load()
@@ -78,6 +177,8 @@ namespace MyWindowsMediaPlayer.Model
             try
             {
                 xml = (XmlBDD.Xml)xmlSerializer.Deserialize(rfile);
+                FixMedia();
+                FixPlaylist();
                 xml.MediaList.Sort(delegate (Xml.Media a, Xml.Media b)
                 {
                     if (a.Id < b.Id)
@@ -105,6 +206,7 @@ namespace MyWindowsMediaPlayer.Model
                     else
                         return 0;
                 });
+                FixLink();
             }
             catch
             {

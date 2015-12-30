@@ -11,22 +11,26 @@ namespace UnitTestMyWindowsMediaPlayer
     public class TestXmlBDD
     {
         [TestMethod]
+        [Timeout(1000)]
         public void InstanciateXmlBDD()
         {
             IBDD idd = new XmlBDD();
         }
         [TestMethod]
+        [Timeout(1000)]
         public void InstanciateXmlBDDWithGoodPath()
         {
             IBDD idd = new XmlBDD("ramdom.xml");
         }
         [TestMethod]
+        [Timeout(1000)]
         [ExpectedException(typeof(ArgumentException))]
         public void InstanciateXmlBDDWithWrongPath()
         {
             IBDD idd = new XmlBDD("");
         }
         [TestMethod]
+        [Timeout(1000)]
         public void AddListMedia()
         {
             String path = "42.xml";
