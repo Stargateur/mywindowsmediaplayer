@@ -26,7 +26,7 @@ namespace MyWindowsMediaPlayer
 
         public void appendLog(String log)
         {
-            this.debug.Text = this.debug.Text += "\n" + log;
+            this.debug.Text += log + "\n";
             this.Show();
         }
 
