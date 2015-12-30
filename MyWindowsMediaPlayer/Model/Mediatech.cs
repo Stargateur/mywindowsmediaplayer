@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,9 +10,9 @@ namespace MyWindowsMediaPlayer.Model
 {
     public class Mediatech
     {
-        Playlist Running = new Playlist("Running");
-        public List<Media> Medias = new List<Media>();
-        List<Playlist> Playlists = new List<Playlist>();
+        Playlist Running = new Playlist("En cours");
+        public Playlist MediaList { get; } = new Playlist("Tous les médias");
+        public ObservableCollection<Playlist> Playlists { get; } = new ObservableCollection<Playlist>();
         IBDD bdd = new XmlBDD();
 
         public bool isMenuShown = true;
@@ -21,13 +22,15 @@ namespace MyWindowsMediaPlayer.Model
         public Mediatech()
         {
             bdd.AddMedia(System.IO.Path.GetFullPath(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), @"..\..\..\Music\allies_music1.mp3"))); // DEBUG
+            bdd.AddPlaylist("Test1");
+            bdd.AddMedia(System.IO.Path.GetFullPath(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), @"..\..\..\Music\allies_music1.mp3")), "Test1");
             var paths = bdd.GetMedia();
-            MessageBox.Show(paths.First());
+            //MessageBox.Show(paths.First());
             foreach (string path in paths)
             {
                 System.Diagnostics.Debug.WriteLine("Addind " + path + " Media object");
                 var media = new Media(path);
-                Medias.Add(media);
+                MediaList.AddMedia(media);
             }
             var playlistsname = bdd.GetPlaylist();
             foreach (string playlistname in playlistsname)
@@ -37,8 +40,8 @@ namespace MyWindowsMediaPlayer.Model
                 var playlistpaths = bdd.GetMedia(playlistname);
                 foreach (var playlistpath in playlistpaths)
                 {
-                    Media media = Medias.Find(r => r.Path == playlistpath);
-                    playlist.addMedia(media);
+                    Media media = MediaList.Medias.Where(x => x.Path == playlistpath).First();
+                    playlist.AddMedia(media);
                 }
             }
         }

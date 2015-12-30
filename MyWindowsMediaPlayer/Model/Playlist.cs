@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,8 +10,8 @@ namespace MyWindowsMediaPlayer.Model
     public class Playlist
     {
         #region Properties
-        String Name { get; set; }
-        private List<Media> Medias = new List<Media>();
+        public String Name { get; set; }
+        public ObservableCollection<Media> Medias { get; } = new ObservableCollection<Media>();
         #endregion
 
         /// <summary>
@@ -22,7 +23,7 @@ namespace MyWindowsMediaPlayer.Model
             Name = PlaylistName;
         }
 
-        public void addMedia(Model.Media media)
+        public void AddMedia(Model.Media media)
         {
             Medias.Add(media);
         }

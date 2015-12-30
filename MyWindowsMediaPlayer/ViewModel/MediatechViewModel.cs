@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -14,10 +15,7 @@ namespace MyWindowsMediaPlayer.ViewModel
         #endregion
 
         #region Properties
-        public Model.Mediatech Mediatech {
-            get { return mediatech; }
-            set { mediatech = value; }
-        }
+        public Model.Mediatech Mediatech { get; }
 
         public bool isMenuShown
         {
@@ -29,17 +27,15 @@ namespace MyWindowsMediaPlayer.ViewModel
             get { return mediatech.isFullScreen; }
             set { mediatech.isFullScreen = value; RaisePropertyChanged("isFullScreen"); }
         }
-        public String Medias
+ 
+        public ObservableCollection<Model.Playlist> Playlists
         {
-            get
-            {
-                String medias = "";
-                foreach (var media in mediatech.Medias)
-                {
-                    medias = medias + "\n" + media.Title + ".";
-                }
-                return medias;
-            }
+            get { return mediatech.Playlists; }
+        }
+
+        public Model.Playlist Medias
+        {
+            get { return mediatech.MediaList; }
         }
         #endregion
 

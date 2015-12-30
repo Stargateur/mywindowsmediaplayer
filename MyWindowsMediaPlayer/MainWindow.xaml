@@ -27,6 +27,13 @@
                         <Button Name="btn_select_file" Height="{StaticResource ButtonHeight}">Lire...</Button>
                         <Button Height="{StaticResource ButtonHeight}">Lecture en cours</Button>
                         <Button Height="{StaticResource ButtonHeight}">Playlists</Button>
+                        <ListBox Name="lstbx_playlists" ItemsSource="{Binding Playlists}" SelectionChanged="lstbx_playlists_SelectionChanged">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock HorizontalAlignment="Center" Text="{Binding Name}"></TextBlock>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
                     </StackPanel>
                 </Border>
             </DockPanel>
@@ -56,8 +63,27 @@
                 <Grid HorizontalAlignment="Center" Name="pnl_audio" Visibility="Collapsed">
                     <Image Source="C:\Users\Elliott\Documents\Visual Studio 2015\Projects\EpitechTP\MyWindowsMediaPlayerV2\Resources\song.gif" Stretch="None" HorizontalAlignment="Center"></Image>
                 </Grid>
-                <Grid Name="pnl_video" Visibility="Visible">
-                    <MediaElement Name="player"></MediaElement>
+                <Grid Name="pnl_medias" Visibility="Visible">
+                    <ListBox Name="lstbx_medias" ItemsSource="{Binding Medias}" SelectionChanged="lstbx_medias_SelectionChanged">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid VerticalAlignment="Top" Columns="5"/>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <TextBlock HorizontalAlignment="Center" Text="{Binding Title}"></TextBlock>
+                                    <TextBlock HorizontalAlignment="Center" Text="{Binding Author}"></TextBlock>
+                                    <TextBlock HorizontalAlignment="Center" Text="{Binding Duration}"></TextBlock>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+                <Grid Name="pnl_video" Visibility="Collapsed">
+                    <MediaElement Name="me_player"></MediaElement>
                 </Grid>
             </Grid>
         </Border>

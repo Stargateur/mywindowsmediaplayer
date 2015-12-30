@@ -22,19 +22,38 @@ namespace MyWindowsMediaPlayer
     public partial class MainWindow : Window
     {
         ViewModel.MediatechViewModel MediatechViewModel;
+        ViewModel.PlaylistViewModel PlaylistViewModel;
 
         public MainWindow()
         {
             InitializeComponent();
             MediatechViewModel = new ViewModel.MediatechViewModel();
-            MessageBox.Show(MediatechViewModel.Medias);
+            //MessageBox.Show(MediatechViewModel.Medias);
             this.DataContext = MediatechViewModel;
+            PlaylistViewModel = new ViewModel.PlaylistViewModel(MediatechViewModel.Medias);
+            this.pnl_medias.DataContext = PlaylistViewModel;
         }
 
         private void btn_play_Click(object sender, RoutedEventArgs e)
         {
             MediatechViewModel.isMenuShown = !MediatechViewModel.isMenuShown;
             //MessageBox.Show("new menu state: " + MediatechViewModel.isMenuShown.ToString());
+        }
+
+        private void lstbx_medias_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListBox lbox = (ListBox)e.Source;
+            Model.Media selection = (Model.Media)lbox.SelectedItem;
+            this.me_player.Source = new Uri(selection.Path);
+            //this.me_player.Play();
+            //MessageBox.Show(selection.Title);
+        }
+
+        private void lstbx_playlists_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListBox lbox = (ListBox)e.Source;
+            Model.Playlist selection = (Model.Playlist)lbox.SelectedItem;
+            this.pnl_medias.DataContext = new ViewModel.PlaylistViewModel(selection);
         }
     }
 }
