@@ -21,5 +21,16 @@ namespace UnitTestMyWindowsMediaPlayer
                mediaList.Add(i.ToString());
             ibdd.AddMedia(mediaList, "the answer to life the universe and everything");
         }
+        [TestMethod]
+        public void TestMethod2()
+        {
+            IBDD ibdd = new XmlBDD("42.xml");
+
+            var mediaList = new List<String>();
+
+            foreach (var i in Enumerable.Range(0, 42))
+                mediaList.Add(i.ToString());
+            ibdd.AddMedia(mediaList, "the answer to life the universe and everything");
+        }
     }
 }

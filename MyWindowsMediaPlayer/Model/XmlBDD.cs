@@ -53,7 +53,7 @@ namespace MyWindowsMediaPlayer.Model
         /// <param name="XmlPath">Path pour charger/sauvegarder le xml</param>
         public XmlBDD(String XmlPath)
         {
-            path = XmlPath;
+            path = System.IO.Path.GetFullPath(XmlPath);
 
             load();
         }
@@ -505,4 +505,3 @@ namespace MyWindowsMediaPlayer.Model
         }
     }
 }
-    
