@@ -26,6 +26,11 @@ namespace MyWindowsMediaPlayer.Model
         private String path;
 
         /// <summary>
+        /// false si le fichier doit être sauvegarder
+        /// </summary>
+        private Boolean isFlush = true;
+
+        /// <summary>
         /// Instancie un nouvel objet de la classe XmlBDD ayant pour path %AppData%/%NameProject%/%NameProject%.xml
         /// </summary>
         public XmlBDD()
@@ -63,7 +68,7 @@ namespace MyWindowsMediaPlayer.Model
         {
             try
             {
-                save();
+                Flush();
             }
             catch
             { }
@@ -220,9 +225,12 @@ namespace MyWindowsMediaPlayer.Model
         /// </summary>
         private void save()
         {
+            if (isFlush)
+                return;
             var wfile = new System.IO.FileStream(path, System.IO.FileMode.Truncate, System.IO.FileAccess.Write);
             xmlSerializer.Serialize(wfile, xml);
             wfile.Close();
+            isFlush = true;
         }
 
         /// <summary>
@@ -257,6 +265,7 @@ namespace MyWindowsMediaPlayer.Model
                     j++;
 
             xml.MediaList.Insert(i, new Xml.Media(i, PathMedia));
+            isFlush = false;
 
             return i;
         }
@@ -294,6 +303,7 @@ namespace MyWindowsMediaPlayer.Model
                     j++;
 
             xml.LinkList.Insert(i, new Xml.Link(idMedia, idPlaylist));
+            isFlush = false;
         }
 
         /// <summary>
@@ -351,6 +361,7 @@ namespace MyWindowsMediaPlayer.Model
                     j++;
 
             xml.PlaylistList.Insert(i, new Xml.Playlist(i, NamePlaylist));
+            isFlush = false;
 
             return i;
         }
