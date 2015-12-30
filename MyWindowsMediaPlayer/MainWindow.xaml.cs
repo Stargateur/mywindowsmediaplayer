@@ -32,7 +32,6 @@ namespace MyWindowsMediaPlayer
             this.DataContext = MediatechViewModel;
             PlaylistViewModel = new ViewModel.PlaylistViewModel(MediatechViewModel.Medias);
             this.pnl_medias.DataContext = PlaylistViewModel;
-            log.LogWindow.appendLog("MDR");
         }
 
         private void btn_play_Click(object sender, RoutedEventArgs e)

@@ -34,6 +34,7 @@ namespace MyWindowsMediaPlayer.Model
                 var media = new Media(path);
                 MediaList.AddMedia(media);
             }
+            Playlists.Add(MediaList);
             var playlistsname = bdd.GetPlaylist();
             foreach (string playlistname in playlistsname)
             {
