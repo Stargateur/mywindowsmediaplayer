@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyWindowsMediaPlayer.Model
 {
@@ -63,7 +61,12 @@ namespace MyWindowsMediaPlayer.Model
         /// </summary>
         ~XmlBDD()
         {
-            save();
+            try
+            {
+                save();
+            }
+            catch
+            { }
         }
 
         /// <summary>
@@ -118,6 +121,14 @@ namespace MyWindowsMediaPlayer.Model
             var wfile = new System.IO.FileStream(path, System.IO.FileMode.Truncate, System.IO.FileAccess.Write);
             xmlSerializer.Serialize(wfile, xml);
             wfile.Close();
+        }
+
+        /// <summary>
+        /// Cette fonction demande à la BDD de flush ses données
+        /// </summary>
+        public void Flush()
+        {
+            save();
         }
 
         /// <summary>
