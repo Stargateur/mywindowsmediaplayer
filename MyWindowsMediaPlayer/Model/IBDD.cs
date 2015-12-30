@@ -72,5 +72,9 @@ namespace MyWindowsMediaPlayer.Model
         /// <param name="NamePlaylist">Nom de la playlist</param>
         /// <returns>Liste de path des medias</returns>
         List<String> GetMedia(String NamePlaylist);
+        /// <summary>
+        /// Cette fonction demande à la BDD de flush ses données
+        /// </summary>
+        void Flush();
     }
 }

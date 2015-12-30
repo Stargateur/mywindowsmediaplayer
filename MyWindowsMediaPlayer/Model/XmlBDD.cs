@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MyWindowsMediaPlayer.Model
 {
@@ -26,6 +24,11 @@ namespace MyWindowsMediaPlayer.Model
         /// Path du fichier Xml pour charger et sauvegarder
         /// </summary>
         private String path;
+
+        /// <summary>
+        /// false si le fichier doit être sauvegarder
+        /// </summary>
+        private Boolean isFlush = true;
 
         /// <summary>
         /// Instancie un nouvel objet de la classe XmlBDD ayant pour path %AppData%/%NameProject%/%NameProject%.xml
@@ -53,7 +56,7 @@ namespace MyWindowsMediaPlayer.Model
         /// <param name="XmlPath">Path pour charger/sauvegarder le xml</param>
         public XmlBDD(String XmlPath)
         {
-            path = XmlPath;
+            path = System.IO.Path.GetFullPath(XmlPath);
 
             load();
         }
@@ -63,7 +66,111 @@ namespace MyWindowsMediaPlayer.Model
         /// </summary>
         ~XmlBDD()
         {
-            save();
+            try
+            {
+                Flush();
+            }
+            catch
+            { }
+        }
+
+        /// <summary>
+        /// Destruis les liens en double, et les liens qui relie mêne vers des medias qui n'existe pas
+        /// ou vers des playlists qui n'existe pas
+        /// </summary>
+        public void FixLink()
+        {
+            Int32 i = 0;
+            Int32 j = 0;
+            while (i < xml.LinkList.Count() && j < xml.MediaList.Count())
+            {
+                if (xml.MediaList[j].Id < xml.LinkList[i].IdMedia)
+                {
+                    j++;
+                    continue;
+                }
+                else if (xml.MediaList[j].Id > xml.LinkList[i].IdMedia)
+                    xml.LinkList.RemoveAt(i);
+                else
+                {
+                    Int32 tmpI = i + 1;
+                    while (tmpI < xml.LinkList.Count())
+                        if (xml.LinkList[tmpI].IdMedia != xml.LinkList[i].IdMedia)
+                            break;
+                        else if (xml.LinkList[tmpI].IdPlaylist == xml.LinkList[i].IdPlaylist)
+                            xml.LinkList.RemoveAt(tmpI);
+                        else
+                            tmpI++;
+                    Int32 k = 0;
+                    while (k < xml.PlaylistList.Count())
+                    {
+                        if (xml.PlaylistList[k].Id < xml.LinkList[i].IdPlaylist)
+                        {
+                            k++;
+                            continue;
+                        }
+                        else if (xml.PlaylistList[k].Id > xml.LinkList[i].IdPlaylist)
+                            xml.LinkList.RemoveAt(i);
+                        else
+                            i++;
+                        break;
+                    }
+                }
+            }
+            while (i < xml.LinkList.Count())
+                xml.LinkList.RemoveAt(i);
+        }
+
+        /// <summary>
+        /// Détruit les medias en doublons et les medias qui ont le même Id
+        /// </summary>
+        private void FixMedia()
+        {
+            Int32 i = 0;
+            while (i < xml.MediaList.Count())
+            {
+                Int32 j = i + 1;
+                while (j < xml.MediaList.Count())
+                    if (xml.MediaList[j].Id == xml.MediaList[i].Id)
+                        xml.MediaList.RemoveAt(j);
+                    else if (xml.MediaList[j].Path == xml.MediaList[i].Path)
+                    {
+                        Int32 k = 0;
+                        while (k < xml.LinkList.Count())
+                            if (xml.LinkList[k].IdMedia == xml.MediaList[j].Id)
+                                xml.LinkList[k].IdMedia = xml.MediaList[i].Id;
+                        xml.MediaList.RemoveAt(j);
+                    }
+                    else
+                        j++;
+                i++;
+            }
+        }
+
+        /// <summary>
+        /// Détruit les playlists en doublons et les medias qui ont le même Id
+        /// </summary>
+        private void FixPlaylist()
+        {
+            Int32 i = 0;
+            while (i < xml.PlaylistList.Count())
+            {
+                Int32 j = i + 1;
+                while (j < xml.PlaylistList.Count())
+                    if (xml.PlaylistList[j].Id == xml.PlaylistList[i].Id)
+                        xml.PlaylistList.RemoveAt(j);
+                    else if (xml.PlaylistList[j].Name == xml.PlaylistList[i].Name)
+                    {
+                        Int32 k = 0;
+                        while (k < xml.LinkList.Count())
+                            if (xml.LinkList[k].IdPlaylist == xml.PlaylistList[j].Id)
+                                xml.LinkList[k].IdPlaylist = xml.PlaylistList[i].Id;
+                        xml.PlaylistList.RemoveAt(j);
+                    }
+                    else
+                        j++;
+                i++;
+            }
         }
 
         /// <summary>
@@ -75,6 +182,8 @@ namespace MyWindowsMediaPlayer.Model
             try
             {
                 xml = (XmlBDD.Xml)xmlSerializer.Deserialize(rfile);
+                FixMedia();
+                FixPlaylist();
                 xml.MediaList.Sort(delegate (Xml.Media a, Xml.Media b)
                 {
                     if (a.Id < b.Id)
@@ -102,6 +211,7 @@ namespace MyWindowsMediaPlayer.Model
                     else
                         return 0;
                 });
+                FixLink();
             }
             catch
             {
@@ -115,9 +225,20 @@ namespace MyWindowsMediaPlayer.Model
         /// </summary>
         private void save()
         {
+            if (isFlush)
+                return;
             var wfile = new System.IO.FileStream(path, System.IO.FileMode.Truncate, System.IO.FileAccess.Write);
             xmlSerializer.Serialize(wfile, xml);
             wfile.Close();
+            isFlush = true;
+        }
+
+        /// <summary>
+        /// Cette fonction demande à la BDD de flush ses données
+        /// </summary>
+        public void Flush()
+        {
+            save();
         }
 
         /// <summary>
@@ -144,6 +265,7 @@ namespace MyWindowsMediaPlayer.Model
                     j++;
 
             xml.MediaList.Insert(i, new Xml.Media(i, PathMedia));
+            isFlush = false;
 
             return i;
         }
@@ -181,6 +303,7 @@ namespace MyWindowsMediaPlayer.Model
                     j++;
 
             xml.LinkList.Insert(i, new Xml.Link(idMedia, idPlaylist));
+            isFlush = false;
         }
 
         /// <summary>
@@ -238,6 +361,7 @@ namespace MyWindowsMediaPlayer.Model
                     j++;
 
             xml.PlaylistList.Insert(i, new Xml.Playlist(i, NamePlaylist));
+            isFlush = false;
 
             return i;
         }
@@ -505,4 +629,3 @@ namespace MyWindowsMediaPlayer.Model
         }
     }
 }
-    
