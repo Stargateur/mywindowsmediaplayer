@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,32 +8,17 @@ namespace MyWindowsMediaPlayer.Model
 {
     public class XmlBDD : IBDD
     {
-        private String path;
-        public String Path
-        {
-            get
-            {
-                return path;
-            }
-
-            set
-            {
-                save();
-                path = value;
-                load();
-            }
-        }
-
         private System.Xml.Serialization.XmlSerializer xmlSerializer;
         private XmlBDD.Xml xml;
+        private String path;
 
         public XmlBDD()
         {
             xmlSerializer = new System.Xml.Serialization.XmlSerializer(typeof(XmlBDD.Xml));
             String applicationDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            String myWindowsMediaPlayer = System.IO.Path.Combine(applicationDataFolder, Assembly.GetCallingAssembly().GetName().Name);
+            String myWindowsMediaPlayer = System.IO.Path.Combine(applicationDataFolder, System.Reflection.Assembly.GetCallingAssembly().GetName().Name);
             System.IO.Directory.CreateDirectory(myWindowsMediaPlayer);
-            path = System.IO.Path.Combine(myWindowsMediaPlayer, @"MyWindowsMediaPlayer.xml");
+            path = System.IO.Path.Combine(myWindowsMediaPlayer, myWindowsMediaPlayer + ".xml");
             load();
         }
 
@@ -52,7 +36,7 @@ namespace MyWindowsMediaPlayer.Model
 
         private void load()
         {
-            var rfile = new System.IO.FileStream(Path, System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.Read);
+            var rfile = new System.IO.FileStream(path, System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.Read);
             try
             {
                 xml = (XmlBDD.Xml)xmlSerializer.Deserialize(rfile);
@@ -87,15 +71,12 @@ namespace MyWindowsMediaPlayer.Model
             catch
             {
                 xml = new XmlBDD.Xml();
-                xml.MediaList = new List<Xml.Media>();
-                xml.PlaylistList = new List<Xml.Playlist>();
-                xml.LinkList = new List<Xml.Link>();
             }
             rfile.Close();
         }
         private void save()
         {
-            var wfile = new System.IO.FileStream(Path, System.IO.FileMode.Truncate, System.IO.FileAccess.Write);
+            var wfile = new System.IO.FileStream(path, System.IO.FileMode.Truncate, System.IO.FileAccess.Write);
             xmlSerializer.Serialize(wfile, xml);
             wfile.Close();
         }
@@ -131,7 +112,7 @@ namespace MyWindowsMediaPlayer.Model
 
             Int32 i = 0;
             while (i < xml.LinkList.Count())
-                if (idMedia >= xml.LinkList[i].IdMedia)
+                if (idMedia <= xml.LinkList[i].IdMedia)
                     break;
                 else
                     i++;
@@ -140,7 +121,7 @@ namespace MyWindowsMediaPlayer.Model
             while (j < xml.LinkList.Count())
                 if (idMedia != xml.LinkList[j].IdMedia)
                     break;
-                else if (idPlaylist == xml.LinkList[j].IdMedia)
+                else if (idPlaylist == xml.LinkList[j].IdPlaylist)
                     return;
                 else
                     j++;
@@ -154,12 +135,11 @@ namespace MyWindowsMediaPlayer.Model
 
             foreach (var pathMedia in PathMedia)
             {
-                Start:
                 Int32 idMedia = AddMedia(pathMedia);
 
                 Int32 i = 0;
                 while (i < xml.LinkList.Count())
-                    if (idMedia >= xml.LinkList[i].IdMedia)
+                    if (idMedia <= xml.LinkList[i].IdMedia)
                         break;
                     else
                         i++;
@@ -168,12 +148,13 @@ namespace MyWindowsMediaPlayer.Model
                 while (j < xml.LinkList.Count())
                     if (idMedia != xml.LinkList[j].IdMedia)
                         break;
-                    else if (idPlaylist == xml.LinkList[j].IdMedia)
-                        goto Start;
+                    else if (idPlaylist == xml.LinkList[j].IdPlaylist)
+                        goto noInsert;
                     else
                         j++;
 
                 xml.LinkList.Insert(i, new Xml.Link(idMedia, idPlaylist));
+                noInsert:;
             }
         }
 
@@ -294,10 +275,15 @@ namespace MyWindowsMediaPlayer.Model
         public class Xml
         {
             public Xml()
-            { }
+            {
+                MediaList = new List<Xml.Media>();
+                PlaylistList = new List<Xml.Playlist>();
+                LinkList = new List<Xml.Link>();
+            }
             public class Media
             {
-                public Media()
+                public Media() :
+                    this(0, "")
                 { }
                 public Media(Int32 Id, String Path)
                 {
@@ -310,7 +296,8 @@ namespace MyWindowsMediaPlayer.Model
             public List<Media> MediaList;
             public class Playlist
             {
-                public Playlist()
+                public Playlist() :
+                    this(0, "")
                 { }
                 public Playlist(Int32 Id, String Name)
                 {
@@ -323,7 +310,8 @@ namespace MyWindowsMediaPlayer.Model
             public List<Playlist> PlaylistList;
             public class Link
             {
-                public Link()
+                public Link() :
+                    this(0, 0)
                 { }
                 public Link(Int32 IdMedia, Int32 IdPlaylist)
                 {

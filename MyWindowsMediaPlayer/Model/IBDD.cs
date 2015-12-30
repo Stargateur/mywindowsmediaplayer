@@ -8,11 +8,6 @@ namespace MyWindowsMediaPlayer.Model
 {
     public interface IBDD
     {
-        String Path
-        {
-            get;
-            set;
-        }
         Int32 AddPlaylist(String NamePlaylist);
         void AddPlaylist(String NamePlaylist, String PathMedia);
         void AddPlaylist(String NamePlaylist, List<String> PathMedia);

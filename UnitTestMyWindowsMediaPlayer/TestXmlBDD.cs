@@ -13,12 +13,12 @@ namespace UnitTestMyWindowsMediaPlayer
         [TestMethod]
         public void TestMethod1()
         {
-            IBDD ibdd = new XmlBDD(Assembly.GetCallingAssembly().GetName().Name);
+            IBDD ibdd = new XmlBDD();
 
             var mediaList = new List<String>();
 
             foreach (var i in Enumerable.Range(0, 42))
-                mediaList.Add(i.ToString());
+               mediaList.Add(i.ToString());
             ibdd.AddMedia(mediaList, "the answer to life the universe and everything");
         }
     }
