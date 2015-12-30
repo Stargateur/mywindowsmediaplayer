@@ -75,8 +75,10 @@ namespace MyWindowsMediaPlayer.Model
                             Date = tmp;
                         break;
                 }
-                stags = stags + entry.Key + " => " + entry.Value + "\n";
+                stags = stags + entry.Key + " => " + entry.Value + "\n"; // DEBUG
             }
+            if (Title.Equals(""))
+                Title = System.IO.Path.GetFileNameWithoutExtension(path);
             //MessageBox.Show(stags); // DEBUG
         }
 
