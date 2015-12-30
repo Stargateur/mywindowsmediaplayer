@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyWindowsMediaPlayer", "MyWindowsMediaPlayer.csproj", "{2A25D243-ED46-46C6-90EA-2D719E544073}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyWindowsMediaPlayer", "MyWindowsMediaPlayer\MyWindowsMediaPlayer.csproj", "{2A25D243-ED46-46C6-90EA-2D719E544073}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestMyWindowsMediaPlayer", "..\UnitTestMyWindowsMediaPlayer\UnitTestMyWindowsMediaPlayer.csproj", "{6E66425E-6ED9-48FD-A9D8-A4E2A561A6D1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestMyWindowsMediaPlayer", "UnitTestMyWindowsMediaPlayer\UnitTestMyWindowsMediaPlayer.csproj", "{6E66425E-6ED9-48FD-A9D8-A4E2A561A6D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
