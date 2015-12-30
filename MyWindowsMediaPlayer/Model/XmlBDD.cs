@@ -18,7 +18,7 @@ namespace MyWindowsMediaPlayer.Model
             String applicationDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             String myWindowsMediaPlayer = System.IO.Path.Combine(applicationDataFolder, System.Reflection.Assembly.GetCallingAssembly().GetName().Name);
             System.IO.Directory.CreateDirectory(myWindowsMediaPlayer);
-            path = System.IO.Path.Combine(myWindowsMediaPlayer, myWindowsMediaPlayer + ".xml");
+            path = System.IO.Path.Combine(myWindowsMediaPlayer, System.Reflection.Assembly.GetCallingAssembly().GetName().Name + ".xml");
             load();
         }
 
@@ -81,7 +81,7 @@ namespace MyWindowsMediaPlayer.Model
             wfile.Close();
         }
 
-        public Int32 AddMedia(string PathMedia)
+        private Int32 GetIdMedia(string PathMedia)
         {
             Int32 i = 0;
             while (i < xml.MediaList.Count())
@@ -105,11 +105,13 @@ namespace MyWindowsMediaPlayer.Model
             return i;
         }
 
-        public void AddMedia(string PathMedia, string NamePlaylist)
+        public void AddMedia(string PathMedia)
         {
-            Int32 idMedia = AddMedia(PathMedia);
-            Int32 idPlaylist = AddPlaylist(NamePlaylist);
+            GetIdMedia(PathMedia);
+        }
 
+        private void AddLink(Int32 idMedia, Int32 idPlaylist)
+        {
             Int32 i = 0;
             while (i < xml.LinkList.Count())
                 if (idMedia <= xml.LinkList[i].IdMedia)
@@ -129,36 +131,27 @@ namespace MyWindowsMediaPlayer.Model
             xml.LinkList.Insert(i, new Xml.Link(idMedia, idPlaylist));
         }
 
+        public void AddMedia(string PathMedia, string NamePlaylist)
+        {
+            Int32 idMedia = GetIdMedia(PathMedia);
+            Int32 idPlaylist = GetIdPlaylist(NamePlaylist);
+
+            AddLink(idMedia, idPlaylist);
+        }
+
         public void AddMedia(List<string> PathMedia, string NamePlaylist)
         {
-            Int32 idPlaylist = AddPlaylist(NamePlaylist);
+            Int32 idPlaylist = GetIdPlaylist(NamePlaylist);
 
             foreach (var pathMedia in PathMedia)
             {
-                Int32 idMedia = AddMedia(pathMedia);
+                Int32 idMedia = GetIdMedia(pathMedia);
 
-                Int32 i = 0;
-                while (i < xml.LinkList.Count())
-                    if (idMedia <= xml.LinkList[i].IdMedia)
-                        break;
-                    else
-                        i++;
-
-                Int32 j = i;
-                while (j < xml.LinkList.Count())
-                    if (idMedia != xml.LinkList[j].IdMedia)
-                        break;
-                    else if (idPlaylist == xml.LinkList[j].IdPlaylist)
-                        goto noInsert;
-                    else
-                        j++;
-
-                xml.LinkList.Insert(i, new Xml.Link(idMedia, idPlaylist));
-                noInsert:;
+                AddLink(idMedia, idPlaylist);
             }
         }
 
-        public Int32 AddPlaylist(string NamePlaylist)
+        private Int32 GetIdPlaylist(string NamePlaylist)
         {
             Int32 i = 0;
 
@@ -181,6 +174,11 @@ namespace MyWindowsMediaPlayer.Model
             xml.PlaylistList.Insert(i, new Xml.Playlist(i, NamePlaylist));
 
             return i;
+        }
+
+        public void AddPlaylist(string NamePlaylist)
+        {
+            GetIdPlaylist(NamePlaylist);
         }
 
         public void AddPlaylist(string NamePlaylist, string PathMedia)
@@ -325,3 +323,4 @@ namespace MyWindowsMediaPlayer.Model
         }
     }
 }
+    
