@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MyWindowsMediaPlayer"
         xmlns:System="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="MyWindowsMediaPlayerV2" Height="900" Width="1200" WindowStartupLocation="CenterScreen" Closed="close_log">
+        Title="MyWindowsMediaPlayerV2" Height="900" Width="1200" WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
