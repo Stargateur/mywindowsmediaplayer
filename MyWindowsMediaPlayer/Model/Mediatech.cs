@@ -21,6 +21,8 @@ namespace MyWindowsMediaPlayer.Model
 
         public Mediatech()
         {
+            //foreach (var i in Enumerable.Range(0, 500))
+            //    log.LogWindow.appendLog("TEST MEDIATECH" + i.ToString());
             bdd.AddMedia(System.IO.Path.GetFullPath(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), @"..\..\..\Music\allies_music1.mp3"))); // DEBUG
             bdd.AddPlaylist("Test1");
             bdd.AddMedia(System.IO.Path.GetFullPath(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), @"..\..\..\Music\allies_music1.mp3")), "Test1");

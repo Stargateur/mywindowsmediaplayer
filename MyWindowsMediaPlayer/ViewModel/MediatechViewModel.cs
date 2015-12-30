@@ -41,6 +41,7 @@ namespace MyWindowsMediaPlayer.ViewModel
 
         public MediatechViewModel()
         {
+            
             mediatech = new Model.Mediatech();
         }
 
