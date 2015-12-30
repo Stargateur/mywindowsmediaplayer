@@ -39,7 +39,7 @@ namespace UnitTestMyWindowsMediaPlayer
             var mediaList = new List<String>();
 
             foreach (var i in Enumerable.Range(0, 42))
-                mediaList.Add(i.ToString());
+                mediaList.Add(System.IO.Path.Combine("\\" + i.ToString()));
             ibdd.AddMedia(mediaList, "the answer to life the universe and everything");
             ibdd.Flush();
             var result = System.IO.File.ReadAllText(System.IO.Path.GetFullPath(path));
@@ -49,171 +49,171 @@ namespace UnitTestMyWindowsMediaPlayer
   <MediaList>
     <Media>
       <Id>0</Id>
-      <Path>0</Path>
+      <Path>C:\0</Path>
     </Media>
     <Media>
       <Id>1</Id>
-      <Path>1</Path>
+      <Path>C:\1</Path>
     </Media>
     <Media>
       <Id>2</Id>
-      <Path>2</Path>
+      <Path>C:\2</Path>
     </Media>
     <Media>
       <Id>3</Id>
-      <Path>3</Path>
+      <Path>C:\3</Path>
     </Media>
     <Media>
       <Id>4</Id>
-      <Path>4</Path>
+      <Path>C:\4</Path>
     </Media>
     <Media>
       <Id>5</Id>
-      <Path>5</Path>
+      <Path>C:\5</Path>
     </Media>
     <Media>
       <Id>6</Id>
-      <Path>6</Path>
+      <Path>C:\6</Path>
     </Media>
     <Media>
       <Id>7</Id>
-      <Path>7</Path>
+      <Path>C:\7</Path>
     </Media>
     <Media>
       <Id>8</Id>
-      <Path>8</Path>
+      <Path>C:\8</Path>
     </Media>
     <Media>
       <Id>9</Id>
-      <Path>9</Path>
+      <Path>C:\9</Path>
     </Media>
     <Media>
       <Id>10</Id>
-      <Path>10</Path>
+      <Path>C:\10</Path>
     </Media>
     <Media>
       <Id>11</Id>
-      <Path>11</Path>
+      <Path>C:\11</Path>
     </Media>
     <Media>
       <Id>12</Id>
-      <Path>12</Path>
+      <Path>C:\12</Path>
     </Media>
     <Media>
       <Id>13</Id>
-      <Path>13</Path>
+      <Path>C:\13</Path>
     </Media>
     <Media>
       <Id>14</Id>
-      <Path>14</Path>
+      <Path>C:\14</Path>
     </Media>
     <Media>
       <Id>15</Id>
-      <Path>15</Path>
+      <Path>C:\15</Path>
     </Media>
     <Media>
       <Id>16</Id>
-      <Path>16</Path>
+      <Path>C:\16</Path>
     </Media>
     <Media>
       <Id>17</Id>
-      <Path>17</Path>
+      <Path>C:\17</Path>
     </Media>
     <Media>
       <Id>18</Id>
-      <Path>18</Path>
+      <Path>C:\18</Path>
     </Media>
     <Media>
       <Id>19</Id>
-      <Path>19</Path>
+      <Path>C:\19</Path>
     </Media>
     <Media>
       <Id>20</Id>
-      <Path>20</Path>
+      <Path>C:\20</Path>
     </Media>
     <Media>
       <Id>21</Id>
-      <Path>21</Path>
+      <Path>C:\21</Path>
     </Media>
     <Media>
       <Id>22</Id>
-      <Path>22</Path>
+      <Path>C:\22</Path>
     </Media>
     <Media>
       <Id>23</Id>
-      <Path>23</Path>
+      <Path>C:\23</Path>
     </Media>
     <Media>
       <Id>24</Id>
-      <Path>24</Path>
+      <Path>C:\24</Path>
     </Media>
     <Media>
       <Id>25</Id>
-      <Path>25</Path>
+      <Path>C:\25</Path>
     </Media>
     <Media>
       <Id>26</Id>
-      <Path>26</Path>
+      <Path>C:\26</Path>
     </Media>
     <Media>
       <Id>27</Id>
-      <Path>27</Path>
+      <Path>C:\27</Path>
     </Media>
     <Media>
       <Id>28</Id>
-      <Path>28</Path>
+      <Path>C:\28</Path>
     </Media>
     <Media>
       <Id>29</Id>
-      <Path>29</Path>
+      <Path>C:\29</Path>
     </Media>
     <Media>
       <Id>30</Id>
-      <Path>30</Path>
+      <Path>C:\30</Path>
     </Media>
     <Media>
       <Id>31</Id>
-      <Path>31</Path>
+      <Path>C:\31</Path>
     </Media>
     <Media>
       <Id>32</Id>
-      <Path>32</Path>
+      <Path>C:\32</Path>
     </Media>
     <Media>
       <Id>33</Id>
-      <Path>33</Path>
+      <Path>C:\33</Path>
     </Media>
     <Media>
       <Id>34</Id>
-      <Path>34</Path>
+      <Path>C:\34</Path>
     </Media>
     <Media>
       <Id>35</Id>
-      <Path>35</Path>
+      <Path>C:\35</Path>
     </Media>
     <Media>
       <Id>36</Id>
-      <Path>36</Path>
+      <Path>C:\36</Path>
     </Media>
     <Media>
       <Id>37</Id>
-      <Path>37</Path>
+      <Path>C:\37</Path>
     </Media>
     <Media>
       <Id>38</Id>
-      <Path>38</Path>
+      <Path>C:\38</Path>
     </Media>
     <Media>
       <Id>39</Id>
-      <Path>39</Path>
+      <Path>C:\39</Path>
     </Media>
     <Media>
       <Id>40</Id>
-      <Path>40</Path>
+      <Path>C:\40</Path>
     </Media>
     <Media>
       <Id>41</Id>
-      <Path>41</Path>
+      <Path>C:\41</Path>
     </Media>
   </MediaList>
   <PlaylistList>
