@@ -27,6 +27,9 @@ namespace MyWindowsMediaPlayer
         public MainWindow()
         {
             InitializeComponent();
+
+            foreach (var lol in Media.ScanDirectoryRecursive("C:\\"))
+                Log.LogWindow.appendLog(lol);
             MediatechViewModel = new ViewModel.MediatechViewModel();
             //MessageBox.Show(MediatechViewModel.Medias);
             this.DataContext = MediatechViewModel;

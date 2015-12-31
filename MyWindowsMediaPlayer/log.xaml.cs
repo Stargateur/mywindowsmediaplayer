@@ -4,29 +4,29 @@ using System.Windows;
 namespace MyWindowsMediaPlayer
 {
     /// <summary>
-    /// Logique d'interaction pour log.xaml
+    /// Logique d'interaction pour Log.xaml
     /// </summary>
-    public partial class log : Window
+    public partial class Log : Window
     {
-        static log logWindow;
-        public static log LogWindow {
+        static Log logWindow;
+        public static Log LogWindow {
             get
             {
                 if (logWindow == null)
-                    logWindow = new log();
+                    logWindow = new Log();
                 return logWindow;
             }
         }
 
-        private log()
+        private Log()
         {
             InitializeComponent();
             this.Show();
         }
 
-        public void appendLog(String log)
+        public void appendLog(String Log)
         {
-            this.debug.Text += log + "\n";
+            this.debug.Text += Log + "\n";
             this.Show();
         }
     }

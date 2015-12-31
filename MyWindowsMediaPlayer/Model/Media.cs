@@ -82,6 +82,50 @@ namespace MyWindowsMediaPlayer.Model
             //MessageBox.Show(stags); // DEBUG
         }
 
+        public static List<String> ScanDirectory(String Path)
+        {
+            var result = new List<String>();
+            try
+            {
+                foreach (var file in Directory.EnumerateFiles(Path))
+                    if (isMediaFile(file))
+                        result.Add(file);
+            }
+            catch
+            {
+            }
+            return result;
+        }
+
+        public static List<String> ScanDirectoryRecursive(String Path)
+        {
+            var result = ScanDirectory(Path);
+            try
+            {
+                foreach (var directory in Directory.EnumerateDirectories(Path))
+                    result.AddRange(ScanDirectoryRecursive(directory));
+            }
+            catch
+            {
+            }
+            return result;
+        }
+
+        public static List<String> ScanDirectoryAll()
+        {
+            var result = new List<String>();
+            try
+            {
+                foreach (var logicalDrive in Directory.GetLogicalDrives())
+                    //   result.AddRange(ScanDirectoryRecursive(logicalDrive));
+                    result.Add(logicalDrive);
+            }
+            catch
+            {
+            }
+            return result;
+        }
+
         public static bool isMediaFile(String path)
         {
             return mediaExtensions.ContainsKey(System.IO.Path.GetExtension(path).ToUpperInvariant());

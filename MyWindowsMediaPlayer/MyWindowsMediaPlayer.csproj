@@ -60,8 +60,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="log.xaml.cs">
-      <DependentUpon>log.xaml</DependentUpon>
+    <Compile Include="Log.xaml.cs">
+      <DependentUpon>Log.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\MediatechViewModel.cs" />
     <Compile Include="Model\XmlBDD.cs" />
@@ -70,7 +70,7 @@
     <Compile Include="View\PlayListView.xaml.cs">
       <DependentUpon>PlayListView.xaml</DependentUpon>
     </Compile>
-    <Page Include="log.xaml">
+    <Page Include="Log.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
