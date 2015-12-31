@@ -117,8 +117,7 @@ namespace MyWindowsMediaPlayer.Model
             try
             {
                 foreach (var logicalDrive in Directory.GetLogicalDrives())
-                    //   result.AddRange(ScanDirectoryRecursive(logicalDrive));
-                    result.Add(logicalDrive);
+                    result.AddRange(ScanDirectoryRecursive(logicalDrive));
             }
             catch
             {
