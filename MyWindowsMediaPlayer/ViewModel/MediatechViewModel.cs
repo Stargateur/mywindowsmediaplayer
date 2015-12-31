@@ -37,6 +37,10 @@ namespace MyWindowsMediaPlayer.ViewModel
         {
             get { return mediatech.MediaList; }
         }
+        public Model.Playlist CurrentMedias
+        {
+            get { return mediatech.Running; }
+        }
         #endregion
 
         public MediatechViewModel()

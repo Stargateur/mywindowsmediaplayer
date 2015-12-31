@@ -10,7 +10,7 @@ namespace MyWindowsMediaPlayer.Model
 {
     public class Mediatech
     {
-        Playlist Running = new Playlist("En cours");
+        public Playlist Running { get; } = new Playlist("En cours");
         public Playlist MediaList { get; } = new Playlist("Tous les médias");
         public ObservableCollection<Playlist> Playlists { get; } = new ObservableCollection<Playlist>();
         IBDD bdd = new XmlBDD();
@@ -27,14 +27,14 @@ namespace MyWindowsMediaPlayer.Model
             bdd.AddPlaylist("Test1");
             bdd.AddMedia(System.IO.Path.GetFullPath(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), @"..\..\..\Music\allies_music1.mp3")), "Test1");
             var paths = bdd.GetMedia();
-            //MessageBox.Show(paths.First());
             foreach (string path in paths)
             {
-                System.Diagnostics.Debug.WriteLine("Addind " + path + " Media object");
+                Log.LogWindow.appendLog("Addind " + path + " Media object");
                 var media = new Media(path);
                 MediaList.AddMedia(media);
             }
             Playlists.Add(MediaList);
+            Playlists.Add(Running);
             var playlistsname = bdd.GetPlaylist();
             foreach (string playlistname in playlistsname)
             {
