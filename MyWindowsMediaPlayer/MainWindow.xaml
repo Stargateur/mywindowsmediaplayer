@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MyWindowsMediaPlayer"
         xmlns:System="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="MyWindowsMediaPlayerV2" Height="900" Width="1200" WindowStartupLocation="CenterScreen">
+        Title="MyWindowsMediaPlayerV2" Height="900" Width="1200" WindowStartupLocation="CenterScreen" Icon="Menger_sponge.ico">
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
@@ -82,7 +82,7 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </Grid>
-                <Grid Name="pnl_video" Visibility="Collapsed">
+                <Grid Name="pnl_video" Visibility="Visible">
                     <MediaElement Name="me_player"></MediaElement>
                 </Grid>
             </Grid>
