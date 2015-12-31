@@ -10,9 +10,45 @@ namespace MyWindowsMediaPlayer.Model
 {
     public class Media
     {
-        static Dictionary<String, bool> mediaExtensions = new Dictionary<string, bool>() {
-            { ".WAV", true }, { ".MID", true }, { ".MIDI", true }, { ".WMA", true }, { ".MP3", true }, { ".OGG", true }, { ".RMA", true },
-            { ".AVI", false }, { ".MP4", false }, { ".DIVX", false }, { ".WMV", false }, { ".MKV", false }
+        enum Type
+        {
+            Audio,
+            Image,
+            Video,
+        }
+
+        static Dictionary<String, Type> mediaExtensions = new Dictionary<String, Type>() {
+        #region mediaExtensions
+            { ".WAV", Type.Audio },
+            { ".MP3", Type.Audio },
+            { ".WMA", Type.Audio },
+            { ".OGG", Type.Audio },
+            { ".OGV", Type.Audio },
+            { ".OGA", Type.Audio },
+            { ".OGX", Type.Audio },
+            { ".FLAC", Type.Audio },
+            { ".ACC", Type.Audio },
+            { ".MID", Type.Audio },
+            { ".RMA", Type.Audio },
+            { ".JPG", Type.Image},
+            { ".TIFF", Type.Image},
+            { ".PNG", Type.Image},
+            { ".GIF", Type.Image},
+            { ".PSD", Type.Image},
+            { ".PSP", Type.Image},
+            { ".BMP", Type.Image},
+            { ".AVI", Type.Video },
+            { ".WMV", Type.Video },
+            { ".MOV", Type.Video },
+            { ".DIVX", Type.Video },
+            { ".XVID", Type.Video },
+            { ".MKV", Type.Video },
+            { ".MKA", Type.Video },
+            { ".MKS", Type.Video },
+            { ".MP4", Type.Video },
+            { ".FLV", Type.Video },
+            { ".RMVB", Type.Video },
+            #endregion
         };
 
         public String Path { get; }
@@ -48,7 +84,7 @@ namespace MyWindowsMediaPlayer.Model
             var videoInfo = ffProbe.GetMediaInfo(Path);
             var tags = videoInfo.FormatTags;
             Duration = videoInfo.Duration;
-            AudioOnly = mediaExtensions[this.Extention.ToUpperInvariant()];
+            AudioOnly = mediaExtensions[this.Extention.ToUpperInvariant()] == Type.Audio;
             String stags = ""; // DEBUG
             foreach (KeyValuePair<string, string> entry in tags)
             {
