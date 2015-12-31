@@ -23,6 +23,7 @@ namespace MyWindowsMediaPlayer
     {
         ViewModel.MediatechViewModel MediatechViewModel;
         ViewModel.PlaylistViewModel PlaylistViewModel;
+        ViewModel.PlaylistViewModel CurrentPlaylist;
 
         public MainWindow()
         {
@@ -33,6 +34,8 @@ namespace MyWindowsMediaPlayer
             this.DataContext = MediatechViewModel;
             PlaylistViewModel = new ViewModel.PlaylistViewModel(MediatechViewModel.Medias);
             this.pnl_medias.DataContext = PlaylistViewModel;
+            CurrentPlaylist = new ViewModel.PlaylistViewModel(MediatechViewModel.CurrentMedias);
+            me_player.MediaEnded += Me_player_MediaEnded;
         }
 
         private void btn_play_Click(object sender, RoutedEventArgs e)
@@ -45,7 +48,16 @@ namespace MyWindowsMediaPlayer
         {
             ListBox lbox = (ListBox)e.Source;
             Model.Media selection = (Model.Media)lbox.SelectedItem;
-            this.me_player.Source = new Uri(selection.Path);
+            if (selection != null)
+            {
+                CurrentPlaylist.AddMedia(selection);
+                if (CurrentPlaylist.CurrentlyPlaying == null)
+                {
+                    CurrentPlaylist.CurrentlyPlaying = selection;
+                    me_player.Source = new Uri(CurrentPlaylist.CurrentlyPlaying.Path);
+                }
+            }
+            //this.me_player.Source = new Uri(selection.Path);
             //this.me_player.Play();
             //MessageBox.Show(selection.Title);
         }
@@ -55,6 +67,13 @@ namespace MyWindowsMediaPlayer
             ListBox lbox = (ListBox)e.Source;
             Model.Playlist selection = (Model.Playlist)lbox.SelectedItem;
             this.pnl_medias.DataContext = new ViewModel.PlaylistViewModel(selection);
+        }
+
+        private void Me_player_MediaEnded(object sender, RoutedEventArgs e)
+        {
+            Media toPlay = CurrentPlaylist.NextSong();
+            if (toPlay != null)
+                me_player.Source = new Uri(toPlay.Path);
         }
     }
 }

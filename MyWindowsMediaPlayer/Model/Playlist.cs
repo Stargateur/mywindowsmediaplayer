@@ -12,6 +12,19 @@ namespace MyWindowsMediaPlayer.Model
         #region Properties
         public String Name { get; set; }
         public ObservableCollection<Media> Medias { get; } = new ObservableCollection<Media>();
+        public Media CurrentlyPlaying {
+            get { return currentlyPlaying; }
+            set
+            {
+                if (Medias.IndexOf(value) != -1)
+                    currentlyPlaying = value;
+            }
+        }
+        public int Length { get { return Medias.Count; } }
+        #endregion
+
+        #region
+        private Media currentlyPlaying;
         #endregion
 
         /// <summary>
@@ -26,6 +39,15 @@ namespace MyWindowsMediaPlayer.Model
         public void AddMedia(Model.Media media)
         {
             Medias.Add(media);
+        }
+
+        public Media NextSong()
+        {
+            if (currentlyPlaying == null)
+                currentlyPlaying = Medias.First();
+            else
+                currentlyPlaying = Medias.ElementAtOrDefault(Medias.IndexOf(currentlyPlaying) + 1);
+            return currentlyPlaying;
         }
     }
 }
