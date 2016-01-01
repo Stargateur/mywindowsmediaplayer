@@ -24,6 +24,7 @@ namespace MyWindowsMediaPlayer
         ViewModel.MediatechViewModel MediatechViewModel;
         ViewModel.PlaylistViewModel PlaylistViewModel;
         ViewModel.PlaylistViewModel CurrentPlaylist;
+        System.Timers.Timer Updater;
 
         public MainWindow()
         {
@@ -36,6 +37,30 @@ namespace MyWindowsMediaPlayer
             this.pnl_medias.DataContext = PlaylistViewModel;
             CurrentPlaylist = new ViewModel.PlaylistViewModel(MediatechViewModel.CurrentMedias);
             me_player.MediaEnded += Me_player_MediaEnded;
+            Updater = new System.Timers.Timer();
+            Updater.AutoReset = true;
+            Updater.Interval = 200;
+            Updater.Elapsed += Updater_Elapsed;
+            Updater.Start();
+        }
+
+        ~MainWindow()
+        {
+            Updater.Stop();
+        }
+
+        private void Updater_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            Dispatcher.Invoke(new Action(() =>
+            {
+                if (me_player.NaturalDuration.HasTimeSpan)
+                {
+                    sldr_media_progress.Maximum = me_player.NaturalDuration.TimeSpan.TotalMilliseconds;
+                    sldr_media_progress.Value = me_player.Position.TotalMilliseconds;
+                    lbl_current_time.Content = String.Format("{0}:{1}", me_player.Position.Minutes, me_player.Position.Seconds);
+                    lbl_total_time.Content = String.Format("{0}:{1}", me_player.NaturalDuration.TimeSpan.Minutes, me_player.NaturalDuration.TimeSpan.Seconds);
+                }
+            }));
         }
 
         private void Element_MediaOpened(object sender, EventArgs e)
@@ -102,7 +127,7 @@ namespace MyWindowsMediaPlayer
         {
             if (me_player.NaturalDuration.HasTimeSpan && lastPosition != me_player.Position)
             {
-                lastPosition = new TimeSpan(0, 0, 0, 0, (int)(sldr_media_progress.Value * me_player.NaturalDuration.TimeSpan.TotalMilliseconds / 100));
+                lastPosition = new TimeSpan(0, 0, 0, 0, (int)(sldr_media_progress.Value * me_player.NaturalDuration.TimeSpan.TotalMilliseconds / sldr_media_progress.Maximum));
                 me_player.Position = lastPosition;
             }
         }
