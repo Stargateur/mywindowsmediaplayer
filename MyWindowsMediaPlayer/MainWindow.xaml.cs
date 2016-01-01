@@ -144,6 +144,7 @@ namespace MyWindowsMediaPlayer
         {
             var tmp = new TimeSpan(0, 0, 0, 0, (int)(sldr_media_progress.Value * me_player.NaturalDuration.TimeSpan.TotalMilliseconds / sldr_media_progress.Maximum));
             lbl_current_time.Content = tmp.ToString();
+            SeekToMediaPosition(sender, e);
         }
 
         private void SetVolume(object sender, EventArgs e)
