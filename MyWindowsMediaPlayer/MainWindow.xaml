@@ -50,7 +50,7 @@
                     <ColumnDefinition Width="1*" />
                 </Grid.ColumnDefinitions>
                 <Label Name="lbl_current_time" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">0:00</Label>
-                <Slider Name="sldr_media_progress" ValueChanged="SeekToMediaPosition" Grid.Column="1" Minimum="0" Maximum="100" Value="0" IsMoveToPointEnabled="true" IsEnabled="True" VerticalAlignment="Center"></Slider>
+                <Slider Name="sldr_media_progress" Mouse.MouseUp="SeekToMediaPosition" Thumb.DragStarted="sldr_md_prgrss_DragStarted" Thumb.DragCompleted="sldr_md_prgrss_DragCompleted" Thumb.DragDelta="sldr_md_prgrss_DragDelta" Grid.Column="1" Minimum="0" Maximum="100" Value="0" IsMoveToPointEnabled="true" IsEnabled="True" VerticalAlignment="Center"></Slider>
                 <Label Name="lbl_total_time" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">0:00</Label>
                 <Button Grid.Column="3">Précédent</Button>
                 <Button Name="btn_play" Grid.Column="4" Click="btn_play_Click">Play</Button>
