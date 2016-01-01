@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 using System;
+using System.Linq;
 
 namespace MyWindowsMediaPlayer.ViewModel
 {
@@ -77,7 +78,7 @@ namespace MyWindowsMediaPlayer.ViewModel
                         break;
                 }
             }
-            fd.Filter = "Media Files|"+ mediaExt + "|Audio Files|" + audioExt + "|Video Files|" + videoExt + "|Image Files|" + imageExt + "|All Files|*.*";
+            fd.Filter = "Media Files|"+ mediaExt + "|Audio Files|" + audioExt + "|Video Files|" + videoExt + "|Image Files|" + imageExt + "|All Files|*";
             fd.FilterIndex = 1;
             fd.FileOk += Fd_FileOk;
         }
@@ -87,9 +88,12 @@ namespace MyWindowsMediaPlayer.ViewModel
             if (this.fd.CheckFileExists)
             {
                 try {
-                    var media = new Model.Media(this.fd.FileName);
-                    mediatech.AddMedia(media);
-                    RaisePropertyChanged("Medias");
+                    if (mediatech.MediaList.Medias.Where(x => x.Path == fd.FileName).Count() == 0)
+                    {
+                        var media = new Model.Media(this.fd.FileName);
+                        mediatech.AddMedia(media);
+                        RaisePropertyChanged("Medias");
+                    }
                 }
                 catch (Exception ex)
                 {
