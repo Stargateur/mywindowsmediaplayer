@@ -51,12 +51,7 @@ namespace MyWindowsMediaPlayer
         {
             Dispatcher.Invoke(new Action(() =>
             {
-                if (me_player.NaturalDuration.HasTimeSpan)
-                {
-                    sldr_media_progress.Value = me_player.Position.TotalMilliseconds;
-                    lbl_current_time.Content = me_player.Position.ToString();
-                    //                    lbl_current_time.Content = String.Format("{0}:{1}", me_player.Position.Minutes, me_player.Position.Seconds);
-                }
+                sldr_media_progress.Value = me_player.Position.TotalMilliseconds;
             }));
         }
 
@@ -64,7 +59,6 @@ namespace MyWindowsMediaPlayer
         {
             sldr_media_progress.Maximum = me_player.NaturalDuration.TimeSpan.TotalMilliseconds;
             lbl_total_time.Content = me_player.NaturalDuration.TimeSpan.ToString();
-            //            lbl_total_time.Content = String.Format("{0}:{1}", me_player.NaturalDuration.TimeSpan.Minutes, me_player.NaturalDuration.TimeSpan.Seconds);
         }
 
         private void Element_MediaEnded(object sender, EventArgs e)
@@ -129,6 +123,11 @@ namespace MyWindowsMediaPlayer
             }
         }
 
+        private void sldr_md_prgrss_MouseUp(object sender, EventArgs e)
+        {
+            SeekToMediaPosition(sender, e);
+        }
+
         private void sldr_md_prgrss_DragStarted(object sender, EventArgs e)
         {
             Updater.Stop();
@@ -142,10 +141,13 @@ namespace MyWindowsMediaPlayer
 
         private void sldr_md_prgrss_DragDelta(object sender, EventArgs e)
         {
-            var tmp = new TimeSpan(0, 0, 0, 0, (int)(sldr_media_progress.Value * me_player.NaturalDuration.TimeSpan.TotalMilliseconds / sldr_media_progress.Maximum));
-            lbl_current_time.Content = tmp.ToString();
             if (lastPosition != me_player.Position)
                 SeekToMediaPosition(sender, e);
+        }
+
+        private void sldr_md_prgrss_ValueChanged(object sender, EventArgs e)
+        {
+            lbl_current_time.Content = me_player.Position.ToString();
         }
 
         private void SetVolume(object sender, EventArgs e)
@@ -153,5 +155,6 @@ namespace MyWindowsMediaPlayer
             if (me_player != null && me_player.HasAudio)
                 me_player.Volume = sldr_volume.Value;
         }
+
     }
 }
