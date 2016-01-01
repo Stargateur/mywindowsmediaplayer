@@ -10,16 +10,17 @@ namespace MyWindowsMediaPlayer.Model
 {
     public class Mediatech
     {
-        public Playlist Running { get; } = new Playlist("En cours");
-        public Playlist MediaList { get; } = new Playlist("Tous les médias");
+        public Playlist Running { get; } = new Playlist("En cours", false);
+        public Playlist MediaList { get; } = new Playlist("Tous les médias", true);
         public ObservableCollection<Playlist> Playlists { get; } = new ObservableCollection<Playlist>();
+        public bool IsMenuShown = true;
+        public bool IsBoderLess = false;
+        public bool IsFullScreen = false;
+
+        static Mediatech mediatech;
         IBDD bdd = new XmlBDD();
 
-        public bool isMenuShown = true;
-        public bool isBoderLess = false;
-        public bool isFullScreen = false;
-
-        public Mediatech()
+        private Mediatech()
         {
             //foreach (var i in Enumerable.Range(0, 500))
             //    log.LogWindow.appendLog("TEST MEDIATECH" + i.ToString());
@@ -38,7 +39,7 @@ namespace MyWindowsMediaPlayer.Model
             var playlistsname = bdd.GetPlaylist();
             foreach (string playlistname in playlistsname)
             {
-                var playlist = new Playlist(playlistname);
+                var playlist = new Playlist(playlistname, true);
                 Playlists.Add(playlist);
                 var playlistpaths = bdd.GetMedia(playlistname);
                 foreach (var playlistpath in playlistpaths)
@@ -47,6 +48,13 @@ namespace MyWindowsMediaPlayer.Model
                     playlist.AddMedia(media);
                 }
             }
+        }
+
+        public static Mediatech getInstance()
+        {
+            if (mediatech == null)
+                mediatech = new Mediatech();
+            return mediatech;
         }
     }
 }
