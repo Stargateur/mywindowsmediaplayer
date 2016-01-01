@@ -29,7 +29,6 @@ namespace MyWindowsMediaPlayer
         {
             InitializeComponent();
 
-            Log.LogWindow.appendLog("55");
             MediatechViewModel = new ViewModel.MediatechViewModel();
             //MessageBox.Show(MediatechViewModel.Medias);
             this.DataContext = MediatechViewModel;
@@ -39,10 +38,31 @@ namespace MyWindowsMediaPlayer
             me_player.MediaEnded += Me_player_MediaEnded;
         }
 
+        private void Element_MediaOpened(object sender, EventArgs e)
+        {
+        }
+
+        private void Element_MediaEnded(object sender, EventArgs e)
+        {
+        }
+
+        bool isPlaying = false;
+
         private void btn_play_Click(object sender, RoutedEventArgs e)
         {
-            MediatechViewModel.isMenuShown = !MediatechViewModel.isMenuShown;
-            //MessageBox.Show("new menu state: " + MediatechViewModel.isMenuShown.ToString());
+            //MediatechViewModel.isMenuShown = !MediatechViewModel.isMenuShown;
+
+            if (isPlaying == false)
+            {
+                me_player.Play();
+                btn_play.Content = "Pause";
+            }
+            else 
+            {
+                btn_play.Content = "Play";
+                me_player.Pause();
+            }
+            isPlaying = !isPlaying;
         }
 
         private void lstbx_medias_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -75,6 +95,30 @@ namespace MyWindowsMediaPlayer
             Media toPlay = CurrentPlaylist.NextSong();
             if (toPlay != null)
                 me_player.Source = new Uri(toPlay.Path);
+        }
+        TimeSpan lastPosition = new TimeSpan();
+
+        private void SeekToMediaPosition(object sender, RoutedPropertyChangedEventArgs<double> args)
+        {
+            if (me_player.NaturalDuration.HasTimeSpan && lastPosition != me_player.Position)
+            {
+                lastPosition = new TimeSpan(0, 0, 0, 0, (int)(sldr_media_progress.Value * me_player.NaturalDuration.TimeSpan.TotalMilliseconds / 100));
+                me_player.Position = lastPosition;
+            }
+        }
+
+        private void SetToMediaPosition(object sender, EventArgs e)
+        {
+            if (me_player.NaturalDuration.HasTimeSpan)
+            {
+                sldr_media_progress.Value = me_player.Position.TotalMilliseconds * 100 / me_player.NaturalDuration.TimeSpan.TotalMilliseconds;
+            }
+        }
+
+        private void SetVolume(object sender, RoutedPropertyChangedEventArgs<double> args)
+        {
+            if (me_player != null && me_player.HasAudio)
+                me_player.Volume = sldr_volume.Value;
         }
     }
 }

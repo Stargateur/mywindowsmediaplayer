@@ -29,5 +29,10 @@ namespace MyWindowsMediaPlayer
             this.debug.Text += Log + "\n";
             this.Show();
         }
+
+        public static void appenLog(String Log)
+        {
+            LogWindow.appendLog(Log);
+        }
     }
 }

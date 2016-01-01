@@ -50,12 +50,12 @@
                     <ColumnDefinition Width="1*" />
                 </Grid.ColumnDefinitions>
                 <Label Name="lbl_current_time" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">0:00</Label>
-                <Slider Name="sldr_media_progress" Grid.Column="1" Minimum="0" Maximum="1" Value="0" IsEnabled="False" VerticalAlignment="Center"></Slider>
+                <Slider Name="sldr_media_progress" ValueChanged="SeekToMediaPosition" Grid.Column="1" Minimum="0" Maximum="100" Value="0" IsMoveToPointEnabled="true" IsEnabled="True" VerticalAlignment="Center"></Slider>
                 <Label Name="lbl_total_time" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">0:00</Label>
                 <Button Grid.Column="3">Précédent</Button>
                 <Button Name="btn_play" Grid.Column="4" Click="btn_play_Click">Play</Button>
                 <Button Grid.Column="5">Suivant</Button>
-                <Slider Name="sldr_volume" Grid.Column="6" Minimum="0" Maximum="1" TickFrequency="0.01" Value="1" VerticalAlignment="Center"></Slider>
+                <Slider Name="sldr_volume" ValueChanged="SetVolume" Grid.Column="6" Minimum="0" Maximum="1" Value="0.5" VerticalAlignment="Center"></Slider>
             </Grid>
         </Border>
         <Border BorderThickness="1">
@@ -83,7 +83,7 @@
                     </ListBox>
                 </Grid>
                 <Grid Name="pnl_video" Visibility="Visible">
-                    <MediaElement Name="me_player"></MediaElement>
+                    <MediaElement Name="me_player"  LoadedBehavior="Manual" MediaOpened="Element_MediaOpened" MediaEnded="Element_MediaEnded"></MediaElement>
                 </Grid>
             </Grid>
         </Border>
