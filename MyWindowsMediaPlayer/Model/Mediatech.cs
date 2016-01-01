@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+using System.Windows.Input;
 
 namespace MyWindowsMediaPlayer.Model
 {
@@ -17,8 +13,8 @@ namespace MyWindowsMediaPlayer.Model
         public bool IsBoderLess = false;
         public bool IsFullScreen = false;
 
-        static Mediatech mediatech;
-        IBDD bdd = new XmlBDD();
+        private static Mediatech mediatech;
+        private IBDD bdd = new XmlBDD();
 
         private Mediatech()
         {
@@ -55,6 +51,17 @@ namespace MyWindowsMediaPlayer.Model
             if (mediatech == null)
                 mediatech = new Mediatech();
             return mediatech;
+        }
+
+        public void AddMedia(Model.Media media)
+        {
+            try
+            {
+                bdd.AddMedia(media.Path);
+                MediaList.AddMedia(media);
+            }
+            catch
+            { }
         }
     }
 }

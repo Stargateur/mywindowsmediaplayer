@@ -70,6 +70,7 @@
     <Compile Include="Model\XmlBDD.cs" />
     <Compile Include="Model\IBDD.cs" />
     <Compile Include="ViewModel\PlaylistViewModel.cs" />
+    <Compile Include="ViewModel\RelayCommand.cs" />
     <Compile Include="View\PlayListView.xaml.cs">
       <DependentUpon>PlayListView.xaml</DependentUpon>
     </Compile>

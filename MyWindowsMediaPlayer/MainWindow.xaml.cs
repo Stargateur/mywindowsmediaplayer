@@ -37,7 +37,7 @@ namespace MyWindowsMediaPlayer
             CurrentPlaylist = new ViewModel.PlaylistViewModel(MediatechViewModel.CurrentMedias);
             Updater = new System.Timers.Timer();
             Updater.AutoReset = true;
-            Updater.Interval = 1000;
+            Updater.Interval = 200;
             Updater.Elapsed += Updater_Elapsed;
             Updater.Start();
         }
@@ -64,6 +64,8 @@ namespace MyWindowsMediaPlayer
         {
             sldr_media_progress.Maximum = me_player.NaturalDuration.TimeSpan.TotalMilliseconds;
             lbl_total_time.Content = me_player.NaturalDuration.TimeSpan.ToString();
+            sldr_media_progress.Value = me_player.Position.TotalMilliseconds;
+            lbl_current_time.Content = me_player.Position.ToString();
             //            lbl_total_time.Content = String.Format("{0}:{1}", me_player.NaturalDuration.TimeSpan.Minutes, me_player.NaturalDuration.TimeSpan.Seconds);
         }
 
@@ -72,6 +74,12 @@ namespace MyWindowsMediaPlayer
             Media toPlay = CurrentPlaylist.NextSong();
             if (toPlay != null)
                 me_player.Source = new Uri(toPlay.Path);
+            else
+            {
+                isPlaying = false;
+                btn_play.Content = "Play";
+                me_player.Pause();
+            }
         }
 
         bool isPlaying = false;

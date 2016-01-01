@@ -24,7 +24,7 @@
                 </Border>
                 <Border>
                     <StackPanel Orientation="Vertical">
-                        <Button Name="btn_select_file" Height="{StaticResource ButtonHeight}">Lire...</Button>
+                        <Button Name="btn_select_file" Command="{Binding AddToMediatech}" Height="{StaticResource ButtonHeight}">Ajouter un média</Button>
                         <Button Height="{StaticResource ButtonHeight}">Lecture en cours</Button>
                         <Button Height="{StaticResource ButtonHeight}">Playlists</Button>
                         <ListBox Name="lstbx_playlists" ItemsSource="{Binding Playlists}" SelectionChanged="lstbx_playlists_SelectionChanged">
