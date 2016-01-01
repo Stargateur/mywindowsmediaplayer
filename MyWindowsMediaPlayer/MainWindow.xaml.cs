@@ -35,7 +35,6 @@ namespace MyWindowsMediaPlayer
             PlaylistViewModel = new ViewModel.PlaylistViewModel(MediatechViewModel.Medias);
             this.pnl_medias.DataContext = PlaylistViewModel;
             CurrentPlaylist = new ViewModel.PlaylistViewModel(MediatechViewModel.CurrentMedias);
-            me_player.MediaEnded += Me_player_MediaEnded;
         }
 
         private void Element_MediaOpened(object sender, EventArgs e)
@@ -44,6 +43,9 @@ namespace MyWindowsMediaPlayer
 
         private void Element_MediaEnded(object sender, EventArgs e)
         {
+            Media toPlay = CurrentPlaylist.NextSong();
+            if (toPlay != null)
+                me_player.Source = new Uri(toPlay.Path);
         }
 
         bool isPlaying = false;
@@ -90,12 +92,6 @@ namespace MyWindowsMediaPlayer
             this.pnl_medias.DataContext = new ViewModel.PlaylistViewModel(selection);
         }
 
-        private void Me_player_MediaEnded(object sender, RoutedEventArgs e)
-        {
-            Media toPlay = CurrentPlaylist.NextSong();
-            if (toPlay != null)
-                me_player.Source = new Uri(toPlay.Path);
-        }
         TimeSpan lastPosition = new TimeSpan();
 
         private void SeekToMediaPosition(object sender, RoutedPropertyChangedEventArgs<double> args)
