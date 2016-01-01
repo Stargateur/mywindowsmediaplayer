@@ -122,7 +122,7 @@ namespace MyWindowsMediaPlayer
 
         private void SeekToMediaPosition(object sender, EventArgs e)
         {
-            if (me_player.NaturalDuration.HasTimeSpan && lastPosition != me_player.Position)
+            if (me_player.NaturalDuration.HasTimeSpan)
             {
                 lastPosition = new TimeSpan(0, 0, 0, 0, (int)(sldr_media_progress.Value * me_player.NaturalDuration.TimeSpan.TotalMilliseconds / sldr_media_progress.Maximum));
                 me_player.Position = lastPosition;
@@ -144,7 +144,8 @@ namespace MyWindowsMediaPlayer
         {
             var tmp = new TimeSpan(0, 0, 0, 0, (int)(sldr_media_progress.Value * me_player.NaturalDuration.TimeSpan.TotalMilliseconds / sldr_media_progress.Maximum));
             lbl_current_time.Content = tmp.ToString();
-            SeekToMediaPosition(sender, e);
+            if (lastPosition != me_player.Position)
+                SeekToMediaPosition(sender, e);
         }
 
         private void SetVolume(object sender, EventArgs e)
