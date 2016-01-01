@@ -97,7 +97,7 @@ namespace MyWindowsMediaPlayer
         {
             ListBox lbox = (ListBox)e.Source;
             Model.Media selection = (Model.Media)lbox.SelectedItem;
-            if (selection != null)
+            if (selection != null && PlaylistViewModel.CanAddMedia)
             {
                 CurrentPlaylist.AddMedia(selection);
                 if (CurrentPlaylist.CurrentlyPlaying == null)

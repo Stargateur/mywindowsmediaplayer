@@ -19,13 +19,13 @@ namespace MyWindowsMediaPlayer.ViewModel
 
         public bool isMenuShown
         {
-            get { return mediatech.isMenuShown; }
-            set { mediatech.isMenuShown = value; RaisePropertyChanged("isMenuShown"); }
+            get { return mediatech.IsMenuShown; }
+            set { mediatech.IsMenuShown = value; RaisePropertyChanged("isMenuShown"); }
         }
         public bool isFullScreen
         {
-            get { return mediatech.isFullScreen; }
-            set { mediatech.isFullScreen = value; RaisePropertyChanged("isFullScreen"); }
+            get { return mediatech.IsFullScreen; }
+            set { mediatech.IsFullScreen = value; RaisePropertyChanged("isFullScreen"); }
         }
  
         public ObservableCollection<Model.Playlist> Playlists
@@ -45,8 +45,8 @@ namespace MyWindowsMediaPlayer.ViewModel
 
         public MediatechViewModel()
         {
-            
-            mediatech = new Model.Mediatech();
+
+            mediatech = Model.Mediatech.getInstance();
         }
 
         #region INotifyPopertyChanged

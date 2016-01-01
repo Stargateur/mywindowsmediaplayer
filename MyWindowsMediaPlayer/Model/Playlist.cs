@@ -21,6 +21,7 @@ namespace MyWindowsMediaPlayer.Model
             }
         }
         public int Length { get { return Medias.Count; } }
+        public bool CanAddMedia { get; }
         #endregion
 
         #region
@@ -31,9 +32,10 @@ namespace MyWindowsMediaPlayer.Model
         /// Instancie un nouvel objet de la classe Playlist en prenant en paramètre un nom pour la playlist
         /// </summary>
         /// <param name="PlaylistName">Nom de la playlist</param>
-        public Playlist(String PlaylistName)
+        public Playlist(String PlaylistName, bool CanAddMedia)
         {
             Name = PlaylistName;
+            this.CanAddMedia = CanAddMedia;
         }
 
         public void AddMedia(Model.Media media)

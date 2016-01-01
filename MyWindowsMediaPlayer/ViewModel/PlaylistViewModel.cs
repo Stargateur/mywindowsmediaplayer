@@ -14,6 +14,7 @@ namespace MyWindowsMediaPlayer.ViewModel
 
         public ObservableCollection<Model.Media> Medias { get { return playlist.Medias; } }
         public Model.Media CurrentlyPlaying { get { return playlist.CurrentlyPlaying; } set { playlist.CurrentlyPlaying = value; } }
+        public bool CanAddMedia { get { return playlist.CanAddMedia; } }
 
         public PlaylistViewModel(Model.Playlist playlist)
         {
