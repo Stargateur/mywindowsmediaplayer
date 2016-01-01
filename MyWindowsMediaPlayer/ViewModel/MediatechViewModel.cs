@@ -49,7 +49,35 @@ namespace MyWindowsMediaPlayer.ViewModel
             mediatech = Model.Mediatech.getInstance();
             AddToMediatech = new RelayCommand(AddNewMedia);
             fd.Title = "Select a media file";
-            fd.Filter = "Media Files|*.mkv;*.wmv;*.mp3;*.wav;*.mp4;*.avi|Audio Files|*.mp3;*.wav|MP3 Files|*.mp3|WAV Files|*.wav|All Files|*.*";
+            String mediaExt = "";
+            String audioExt = "";
+            String videoExt = "";
+            String imageExt = "";
+            foreach (var ext in Model.Media.mediaExtensions)
+            {
+                if (mediaExt != "")
+                    mediaExt += ";";
+                mediaExt += "*" + ext.Key.ToLowerInvariant();
+                switch (ext.Value)
+                {
+                    case Model.Media.Type.Audio:
+                        if (audioExt != "")
+                            audioExt += ";";
+                        audioExt += "*" + ext.Key.ToLowerInvariant();
+                        break;
+                    case Model.Media.Type.Video:
+                        if (videoExt != "")
+                            videoExt += ";";
+                        videoExt += "*" + ext.Key.ToLowerInvariant();
+                        break;
+                    case Model.Media.Type.Image:
+                        if (imageExt != "")
+                            imageExt += ";";
+                        imageExt += "*" + ext.Key.ToLowerInvariant();
+                        break;
+                }
+            }
+            fd.Filter = "Media Files|"+ mediaExt + "|Audio Files|" + audioExt + "|Video Files|" + videoExt + "|Image Files|" + imageExt + "|All Files|*.*";
             fd.FilterIndex = 1;
             fd.FileOk += Fd_FileOk;
         }

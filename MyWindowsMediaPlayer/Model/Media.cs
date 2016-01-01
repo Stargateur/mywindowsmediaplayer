@@ -10,14 +10,14 @@ namespace MyWindowsMediaPlayer.Model
 {
     public class Media
     {
-        enum Type
+        public enum Type
         {
             Audio,
             Image,
             Video,
         }
 
-        static Dictionary<String, Type> mediaExtensions = new Dictionary<String, Type>() {
+        public static Dictionary<String, Type> mediaExtensions = new Dictionary<String, Type>() {
         #region mediaExtensions
             {".WAV", Type.Audio},
             {".MP3", Type.Audio},
