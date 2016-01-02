@@ -57,11 +57,12 @@ namespace MyWindowsMediaPlayer
 
         private void Element_MediaOpened(object sender, EventArgs e)
         {
-            sldr_media_progress.Maximum = me_player.NaturalDuration.TimeSpan.TotalMilliseconds;
-            lbl_total_time.Content = me_player.NaturalDuration.TimeSpan.ToString();
+            if (me_player.NaturalDuration.HasTimeSpan)
+            {
+                sldr_media_progress.Maximum = me_player.NaturalDuration.TimeSpan.TotalMilliseconds;
+                lbl_total_time.Content = me_player.NaturalDuration.TimeSpan.ToString();
+            }
             sldr_media_progress.Value = me_player.Position.TotalMilliseconds;
-            lbl_current_time.Content = me_player.Position.ToString();
-            //            lbl_total_time.Content = String.Format("{0}:{1}", me_player.NaturalDuration.TimeSpan.Minutes, me_player.NaturalDuration.TimeSpan.Seconds);
         }
 
         private void Element_MediaEnded(object sender, EventArgs e)
