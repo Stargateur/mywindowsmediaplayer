@@ -49,10 +49,17 @@ namespace MyWindowsMediaPlayer
 
         private void Updater_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            Dispatcher.Invoke(new Action(() =>
+            // Try rajouté pour gerer une exception lors de la fermeture durant une vidéo
+            try
             {
-                sldr_media_progress.Value = me_player.Position.TotalMilliseconds;
-            }));
+                Dispatcher.Invoke(new Action(() =>
+                    {
+                        sldr_media_progress.Value = me_player.Position.TotalMilliseconds;
+                    }));
+            }
+            catch (TaskCanceledException exception)
+            {
+            }
         }
 
         private void Element_MediaOpened(object sender, EventArgs e)
@@ -89,7 +96,7 @@ namespace MyWindowsMediaPlayer
                 me_player.Play();
                 btn_play.Content = "Pause";
             }
-            else 
+            else
             {
                 btn_play.Content = "Play";
                 me_player.Pause();
