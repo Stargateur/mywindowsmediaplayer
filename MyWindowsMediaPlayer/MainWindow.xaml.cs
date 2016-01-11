@@ -62,51 +62,6 @@ namespace MyWindowsMediaPlayer
             { }
         }
 
-        private void Element_MediaOpened(object sender, EventArgs e)
-        {
-            if (MediatechViewModel != null)
-            {
-                if (MediatechViewModel.Player.NaturalDuration.HasTimeSpan)
-                {
-                    sldr_media_progress.Maximum = MediatechViewModel.Player.NaturalDuration.TimeSpan.TotalMilliseconds;
-                    lbl_total_time.Content = MediatechViewModel.Player.NaturalDuration.TimeSpan.ToString();
-                }
-                sldr_media_progress.Value = MediatechViewModel.Player.Position.TotalMilliseconds;
-            }
-        }
-
-        private void Element_MediaEnded(object sender, EventArgs e)
-        {
-            /*Media toPlay = CurrentPlaylist.NextSong();
-            if (toPlay != null)
-                me_player.Source = new Uri(toPlay.Path);
-            else
-            {
-                isPlaying = false;
-                btn_play.Content = "Play";
-                me_player.Pause();
-            }*/
-        }
-
-        bool isPlaying = false;
-
-        private void btn_play_Click(object sender, RoutedEventArgs e)
-        {
-            //MediatechViewModel.isMenuShown = !MediatechViewModel.isMenuShown;
-
-            /*if (isPlaying == false)
-            {
-                me_player.Play();
-                btn_play.Content = "Pause";
-            }
-            else
-            {
-                btn_play.Content = "Play";
-                me_player.Pause();
-            }
-            isPlaying = !isPlaying;*/
-        }
-
         TimeSpan lastPosition = new TimeSpan();
 
         private void SeekToMediaPosition(object sender, EventArgs e)

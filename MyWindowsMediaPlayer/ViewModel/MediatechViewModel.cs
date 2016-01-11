@@ -19,6 +19,8 @@ namespace MyWindowsMediaPlayer.ViewModel
 
         private bool isPlayerShown = false;
         private bool isPlaylistShown = true;
+
+        private String playPauseContent = "Play";
         #endregion
 
         #region Properties
@@ -38,6 +40,7 @@ namespace MyWindowsMediaPlayer.ViewModel
         public ICommand PlayMedia { get; set; }
         public ICommand SelectPlaylist { get; set; }
         public ICommand AddToCurrent { get; set; }
+        public ICommand TogglePlayPause { get; set; }
 
         public bool isMenuShown
         {
@@ -60,6 +63,12 @@ namespace MyWindowsMediaPlayer.ViewModel
             set { isPlaylistShown = value; RaisePropertyChanged("IsPlaylistShown"); }
         }
 
+        public String PlayPauseContent
+        {
+            get { return playPauseContent; }
+            set { playPauseContent = value; RaisePropertyChanged("PlayPauseContent"); }
+        }
+
         public ObservableCollection<Model.Playlist> Playlists
         {
             get { return mediatech.Playlists; }
@@ -79,11 +88,13 @@ namespace MyWindowsMediaPlayer.ViewModel
             mediatech = Model.Mediatech.getInstance();
             Player = new MediaElement();
             Player.LoadedBehavior = MediaState.Manual;
+            Player.MediaEnded += Player_MediaEnded;
 
             AddToMediatech = new RelayCommand(AddNewMedia);
             PlayMedia = new RelayCommand(PlayNewMedia);
             SelectPlaylist = new RelayCommand(ShowPlaylist);
             AddToCurrent = new RelayCommand(AddMediaToCurrentPlaylist);
+            TogglePlayPause = new RelayCommand(PlayPauseCurrentMedia);
 
             PlaylistViewModel = new PlaylistViewModel(Medias);
             CurrentPlaylist = new PlaylistViewModel(mediatech.Running);
@@ -141,6 +152,10 @@ namespace MyWindowsMediaPlayer.ViewModel
             }
         }
 
+        /// <summary>
+        /// Display a FileChooser Dialog and then add it to the mediatech
+        /// </summary>
+        /// <param name="obj"></param>
         public void AddNewMedia(object obj)
         {
             fd.ShowDialog();
@@ -148,12 +163,10 @@ namespace MyWindowsMediaPlayer.ViewModel
 
         public void ShowPlaylist(object obj)
         {
-            Log.appenLog("PLAYLIST CHANGED");
             if (obj != null)
             {
                 IsPlayerShown = false;
                 IsPlaylistShown = true;
-                Log.appenLog(obj.ToString());
                 Model.Playlist selection = (Model.Playlist)obj;
                 PlaylistViewModel.Playlist = selection;
             }
@@ -172,7 +185,8 @@ namespace MyWindowsMediaPlayer.ViewModel
                     {
                         CurrentPlaylist.CurrentlyPlaying = selection;
                         Player.Source = new Uri(CurrentPlaylist.CurrentlyPlaying.Path);
-                        Player.Play();
+                        isPlaying = false;
+                        PlayPauseCurrentMedia(null);
                         if (!selection.AudioOnly)
                         {
                             IsPlaylistShown = false;
@@ -195,9 +209,45 @@ namespace MyWindowsMediaPlayer.ViewModel
                     {
                         CurrentPlaylist.CurrentlyPlaying = selection;
                         Player.Source = new Uri(CurrentPlaylist.CurrentlyPlaying.Path);
+                        isPlaying = false;
+                        PlayPauseCurrentMedia(null);
                     }
                 }
             }
+        }
+
+        private void Player_MediaEnded(object sender, RoutedEventArgs e)
+        {
+            Model.Media toPlay = CurrentPlaylist.NextSong();
+            if (toPlay != null)
+                Player.Source = new Uri(toPlay.Path);
+            else
+            {
+                isPlaying = true;
+                PlayPauseCurrentMedia(null);
+            }
+        }
+
+        bool isPlaying = false;
+        public void PlayPauseCurrentMedia(object obj)
+        {
+            if (CurrentPlaylist.CurrentlyPlaying == null)
+            {
+                Model.Media media = CurrentPlaylist.NextSong();
+                if (media != null)
+                    Player.Source = new Uri(media.Path);
+            }
+            if (isPlaying == false)
+            {
+               Player.Play();
+               PlayPauseContent = "Pause";
+            }
+            else
+            {
+                Player.Pause();
+                PlayPauseContent = "Play";
+            }
+            isPlaying = !isPlaying;
         }
 
         #region INotifyPopertyChanged
