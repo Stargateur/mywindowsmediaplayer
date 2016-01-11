@@ -67,7 +67,7 @@
                 <Button Grid.Column="3">Précédent</Button>
                 <Button Name="btn_play" Grid.Column="4" Click="btn_play_Click">Play</Button>
                 <Button Grid.Column="5">Suivant</Button>
-                <Slider Name="sldr_volume" ValueChanged="SetVolume" Grid.Column="6" Minimum="0" Maximum="1" Value="0.5" VerticalAlignment="Center"></Slider>
+                <Slider Name="sldr_volume" ValueChanged="SetVolume" Grid.Column="6" Minimum="0" Maximum="100" Value="50" VerticalAlignment="Center" SmallChange="1" LargeChange="20"></Slider>
             </Grid>
         </Border>
         <Border BorderThickness="1">
@@ -75,7 +75,7 @@
                 <Grid HorizontalAlignment="Center" Name="pnl_audio" Visibility="Collapsed">
                     <Image Source="C:\Users\Elliott\Documents\Visual Studio 2015\Projects\EpitechTP\MyWindowsMediaPlayerV2\Resources\song.gif" Stretch="None" HorizontalAlignment="Center"></Image>
                 </Grid>
-                <Grid Name="pnl_medias" Visibility="Visible">
+                <Grid Name="pnl_medias" Visibility="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}},Path=DataContext.IsPlaylistShown, Converter={StaticResource BoolToVis}}">
                     <ListBox Name="lstbx_medias" ItemsSource="{Binding Medias}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="MouseDoubleClick">
@@ -102,8 +102,9 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </Grid>
-                <Grid Name="pnl_video" Visibility="Visible">
-                    <MediaElement Name="me_player" LoadedBehavior="Manual" MediaOpened="Element_MediaOpened" MediaEnded="Element_MediaEnded"></MediaElement>
+                <Grid Name="pnl_video" Background="Black" Visibility="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}},Path=DataContext.IsPlayerShown, Converter={StaticResource BoolToVis}}">
+                    <!--<MediaElement LoadedBehavior="Manual"></MediaElement>-->
+                    <ContentControl Content="{Binding Player}" />
                 </Grid>
             </Grid>
         </Border>

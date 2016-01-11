@@ -16,6 +16,9 @@ namespace MyWindowsMediaPlayer.ViewModel
         private OpenFileDialog fd = new OpenFileDialog();
         private PlaylistViewModel currentPlaylist;
         private PlaylistViewModel playlistViewModel;
+
+        private bool isPlayerShown = false;
+        private bool isPlaylistShown = true;
         #endregion
 
         #region Properties
@@ -30,6 +33,7 @@ namespace MyWindowsMediaPlayer.ViewModel
             get { return playlistViewModel; }
             set { playlistViewModel = value; RaisePropertyChanged("PlaylistViewModel"); }
         }
+        public MediaElement Player { get; }
         public ICommand AddToMediatech { get; set; }
         public ICommand PlayMedia { get; set; }
         public ICommand SelectPlaylist { get; set; }
@@ -45,12 +49,21 @@ namespace MyWindowsMediaPlayer.ViewModel
             get { return mediatech.IsFullScreen; }
             set { mediatech.IsFullScreen = value; RaisePropertyChanged("isFullScreen"); }
         }
- 
+        public bool IsPlayerShown
+        {
+            get { return isPlayerShown; }
+            set { isPlayerShown = value; RaisePropertyChanged("IsPlayerShown"); }
+        }
+        public bool IsPlaylistShown
+        {
+            get { return isPlaylistShown; }
+            set { isPlaylistShown = value; RaisePropertyChanged("IsPlaylistShown"); }
+        }
+
         public ObservableCollection<Model.Playlist> Playlists
         {
             get { return mediatech.Playlists; }
         }
-
         public Model.Playlist Medias
         {
             get { return mediatech.MediaList; }
@@ -64,12 +77,17 @@ namespace MyWindowsMediaPlayer.ViewModel
         public MediatechViewModel()
         {
             mediatech = Model.Mediatech.getInstance();
+            Player = new MediaElement();
+            Player.LoadedBehavior = MediaState.Manual;
+
             AddToMediatech = new RelayCommand(AddNewMedia);
             PlayMedia = new RelayCommand(PlayNewMedia);
             SelectPlaylist = new RelayCommand(ShowPlaylist);
             AddToCurrent = new RelayCommand(AddMediaToCurrentPlaylist);
+
             PlaylistViewModel = new PlaylistViewModel(Medias);
             CurrentPlaylist = new PlaylistViewModel(mediatech.Running);
+
             fd.Title = "Select a media file";
             String mediaExt = "";
             String audioExt = "";
@@ -133,6 +151,8 @@ namespace MyWindowsMediaPlayer.ViewModel
             Log.appenLog("PLAYLIST CHANGED");
             if (obj != null)
             {
+                IsPlayerShown = false;
+                IsPlaylistShown = true;
                 Log.appenLog(obj.ToString());
                 Model.Playlist selection = (Model.Playlist)obj;
                 PlaylistViewModel.Playlist = selection;
@@ -151,7 +171,13 @@ namespace MyWindowsMediaPlayer.ViewModel
                     if (CurrentPlaylist.CurrentlyPlaying == null)
                     {
                         CurrentPlaylist.CurrentlyPlaying = selection;
-                        //me_player.Source = new Uri(CurrentPlaylist.CurrentlyPlaying.Path);
+                        Player.Source = new Uri(CurrentPlaylist.CurrentlyPlaying.Path);
+                        Player.Play();
+                        if (!selection.AudioOnly)
+                        {
+                            IsPlaylistShown = false;
+                            IsPlayerShown = true;
+                        }
                     }
                 }
             }
@@ -168,7 +194,7 @@ namespace MyWindowsMediaPlayer.ViewModel
                     if (CurrentPlaylist.CurrentlyPlaying == null)
                     {
                         CurrentPlaylist.CurrentlyPlaying = selection;
-                        //me_player.Source = new Uri(CurrentPlaylist.CurrentlyPlaying.Path);
+                        Player.Source = new Uri(CurrentPlaylist.CurrentlyPlaying.Path);
                     }
                 }
             }

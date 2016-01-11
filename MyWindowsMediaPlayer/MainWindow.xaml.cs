@@ -50,7 +50,12 @@ namespace MyWindowsMediaPlayer
             {
                 Dispatcher.Invoke(new Action(() =>
                     {
-                        sldr_media_progress.Value = me_player.Position.TotalMilliseconds;
+                        sldr_media_progress.Value = MediatechViewModel.Player.Position.TotalMilliseconds;
+                        if (MediatechViewModel.Player.NaturalDuration.HasTimeSpan)
+                        {
+                            sldr_media_progress.Maximum = MediatechViewModel.Player.NaturalDuration.TimeSpan.TotalMilliseconds;
+                            lbl_total_time.Content = MediatechViewModel.Player.NaturalDuration.TimeSpan.ToString();
+                        }
                     }));
             }
             catch
@@ -59,12 +64,15 @@ namespace MyWindowsMediaPlayer
 
         private void Element_MediaOpened(object sender, EventArgs e)
         {
-            if (me_player.NaturalDuration.HasTimeSpan)
+            if (MediatechViewModel != null)
             {
-                sldr_media_progress.Maximum = me_player.NaturalDuration.TimeSpan.TotalMilliseconds;
-                lbl_total_time.Content = me_player.NaturalDuration.TimeSpan.ToString();
+                if (MediatechViewModel.Player.NaturalDuration.HasTimeSpan)
+                {
+                    sldr_media_progress.Maximum = MediatechViewModel.Player.NaturalDuration.TimeSpan.TotalMilliseconds;
+                    lbl_total_time.Content = MediatechViewModel.Player.NaturalDuration.TimeSpan.ToString();
+                }
+                sldr_media_progress.Value = MediatechViewModel.Player.Position.TotalMilliseconds;
             }
-            sldr_media_progress.Value = me_player.Position.TotalMilliseconds;
         }
 
         private void Element_MediaEnded(object sender, EventArgs e)
@@ -86,7 +94,7 @@ namespace MyWindowsMediaPlayer
         {
             //MediatechViewModel.isMenuShown = !MediatechViewModel.isMenuShown;
 
-            if (isPlaying == false)
+            /*if (isPlaying == false)
             {
                 me_player.Play();
                 btn_play.Content = "Pause";
@@ -96,17 +104,17 @@ namespace MyWindowsMediaPlayer
                 btn_play.Content = "Play";
                 me_player.Pause();
             }
-            isPlaying = !isPlaying;
+            isPlaying = !isPlaying;*/
         }
 
         TimeSpan lastPosition = new TimeSpan();
 
         private void SeekToMediaPosition(object sender, EventArgs e)
         {
-            if (me_player.NaturalDuration.HasTimeSpan)
+            if (MediatechViewModel != null && MediatechViewModel.Player.NaturalDuration.HasTimeSpan)
             {
-                lastPosition = new TimeSpan(0, 0, 0, 0, (int)(sldr_media_progress.Value * me_player.NaturalDuration.TimeSpan.TotalMilliseconds / sldr_media_progress.Maximum));
-                me_player.Position = lastPosition;
+                lastPosition = new TimeSpan(0, 0, 0, 0, (int)(sldr_media_progress.Value * MediatechViewModel.Player.NaturalDuration.TimeSpan.TotalMilliseconds / sldr_media_progress.Maximum));
+                MediatechViewModel.Player.Position = lastPosition;
             }
         }
 
@@ -128,19 +136,20 @@ namespace MyWindowsMediaPlayer
 
         private void sldr_md_prgrss_DragDelta(object sender, EventArgs e)
         {
-            if (lastPosition != me_player.Position)
+            if (MediatechViewModel != null && lastPosition != MediatechViewModel.Player.Position)
                 SeekToMediaPosition(sender, e);
         }
 
         private void sldr_md_prgrss_ValueChanged(object sender, EventArgs e)
         {
-            lbl_current_time.Content = me_player.Position.ToString();
+            if (MediatechViewModel != null)
+                lbl_current_time.Content = MediatechViewModel.Player.Position.ToString();
         }
 
         private void SetVolume(object sender, EventArgs e)
         {
-            if (me_player != null && me_player.HasAudio)
-                me_player.Volume = sldr_volume.Value;
+            if (MediatechViewModel != null && MediatechViewModel.Player != null && MediatechViewModel.Player.HasAudio)
+                MediatechViewModel.Player.Volume = sldr_volume.Value / sldr_volume.Maximum;
         }
 
     }
