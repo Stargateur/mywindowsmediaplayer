@@ -50,7 +50,6 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="TestMedia.cs" />
     <Compile Include="TestXmlBDD.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

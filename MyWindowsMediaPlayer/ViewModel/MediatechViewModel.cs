@@ -38,6 +38,7 @@ namespace MyWindowsMediaPlayer.ViewModel
         public ICommand PlayMedia { get; set; }
         public ICommand SelectPlaylist { get; set; }
         public ICommand AddToCurrent { get; set; }
+        public ICommand AddPlaylist { get; set; }
 
         public bool isMenuShown
         {
@@ -84,6 +85,7 @@ namespace MyWindowsMediaPlayer.ViewModel
             PlayMedia = new RelayCommand(PlayNewMedia);
             SelectPlaylist = new RelayCommand(ShowPlaylist);
             AddToCurrent = new RelayCommand(AddMediaToCurrentPlaylist);
+            AddPlaylist = new RelayCommand(AddNewPlaylist);
 
             PlaylistViewModel = new PlaylistViewModel(Medias);
             CurrentPlaylist = new PlaylistViewModel(mediatech.Running);
@@ -198,6 +200,11 @@ namespace MyWindowsMediaPlayer.ViewModel
                     }
                 }
             }
+        }
+
+        public void AddNewPlaylist(object obj)
+        {
+            mediatech.AddPlaylist("testyolo");
         }
 
         #region INotifyPopertyChanged

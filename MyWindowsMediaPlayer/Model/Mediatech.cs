@@ -63,5 +63,18 @@ namespace MyWindowsMediaPlayer.Model
             catch
             { }
         }
+
+        public void AddPlaylist(string name)
+        {
+            try
+            {
+                bdd.AddPlaylist(name);
+                var playlist = new Playlist(name, true);
+                Playlists.Add(playlist);
+                Log.appenLog("new playlist");
+            }
+            catch
+            { }
+        }
     }
 }

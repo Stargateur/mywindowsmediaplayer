@@ -27,7 +27,7 @@
                     <StackPanel Orientation="Vertical">
                         <Button Name="btn_select_file" Command="{Binding AddToMediatech}" Height="{StaticResource ButtonHeight}">Ajouter un média</Button>
                         <Button Height="{StaticResource ButtonHeight}">Lecture en cours</Button>
-                        <Button Height="{StaticResource ButtonHeight}">Playlists</Button>
+                        <Button Height="{StaticResource ButtonHeight}" Command="{Binding AddPlaylist}">Playlists</Button>
                         <ListBox Name="lstbx_playlists" ItemsSource="{Binding Playlists}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="MouseUp">
