@@ -12,6 +12,12 @@ namespace MyWindowsMediaPlayer.ViewModel
     {
         private Model.Playlist playlist;
 
+        public Model.Playlist Playlist
+        {
+            get { return playlist; }
+            set { playlist.CurrentlyPlaying = null; playlist = value; RaisePropertyChanged("Playlist"); RaisePropertyChanged("Medias"); RaisePropertyChanged("CurrentlyPlaying"); }
+        }
+
         public ObservableCollection<Model.Media> Medias { get { return playlist.Medias; } }
         public Model.Media CurrentlyPlaying { get { return playlist.CurrentlyPlaying; } set { playlist.CurrentlyPlaying = value; } }
         public bool CanAddMedia { get { return playlist.CanAddMedia; } }
@@ -24,6 +30,12 @@ namespace MyWindowsMediaPlayer.ViewModel
         public void AddMedia(Model.Media media)
         {
             playlist.AddMedia(media);
+            RaisePropertyChanged("Medias");
+        }
+
+        public void ClearMedias()
+        {
+            playlist.ClearMedias();
             RaisePropertyChanged("Medias");
         }
 

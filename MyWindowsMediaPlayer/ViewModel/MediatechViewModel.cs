@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Input;
 using System;
 using System.Linq;
+using System.Windows.Controls;
 
 namespace MyWindowsMediaPlayer.ViewModel
 {
@@ -13,11 +14,26 @@ namespace MyWindowsMediaPlayer.ViewModel
         #region Members
         private Model.Mediatech mediatech;
         private OpenFileDialog fd = new OpenFileDialog();
+        private PlaylistViewModel currentPlaylist;
+        private PlaylistViewModel playlistViewModel;
         #endregion
 
         #region Properties
         public Model.Mediatech Mediatech { get; }
+        public PlaylistViewModel CurrentPlaylist
+        {
+            get { return currentPlaylist; }
+            set { currentPlaylist = value; RaisePropertyChanged("CurrentPlaylist"); }
+        }
+        public PlaylistViewModel PlaylistViewModel
+        {
+            get { return playlistViewModel; }
+            set { playlistViewModel = value; RaisePropertyChanged("PlaylistViewModel"); }
+        }
         public ICommand AddToMediatech { get; set; }
+        public ICommand PlayMedia { get; set; }
+        public ICommand SelectPlaylist { get; set; }
+        public ICommand AddToCurrent { get; set; }
 
         public bool isMenuShown
         {
@@ -49,6 +65,11 @@ namespace MyWindowsMediaPlayer.ViewModel
         {
             mediatech = Model.Mediatech.getInstance();
             AddToMediatech = new RelayCommand(AddNewMedia);
+            PlayMedia = new RelayCommand(PlayNewMedia);
+            SelectPlaylist = new RelayCommand(ShowPlaylist);
+            AddToCurrent = new RelayCommand(AddMediaToCurrentPlaylist);
+            PlaylistViewModel = new PlaylistViewModel(Medias);
+            CurrentPlaylist = new PlaylistViewModel(mediatech.Running);
             fd.Title = "Select a media file";
             String mediaExt = "";
             String audioExt = "";
@@ -105,6 +126,52 @@ namespace MyWindowsMediaPlayer.ViewModel
         public void AddNewMedia(object obj)
         {
             fd.ShowDialog();
+        }
+
+        public void ShowPlaylist(object obj)
+        {
+            Log.appenLog("PLAYLIST CHANGED");
+            if (obj != null)
+            {
+                Log.appenLog(obj.ToString());
+                Model.Playlist selection = (Model.Playlist)obj;
+                PlaylistViewModel.Playlist = selection;
+            }
+        }
+
+        public void PlayNewMedia(object obj)
+        {
+            if (obj != null)
+            {   
+                Model.Media selection = (Model.Media)obj;
+                if (selection != null && PlaylistViewModel.CanAddMedia)
+                {
+                    CurrentPlaylist.ClearMedias();
+                    CurrentPlaylist.AddMedia(selection);
+                    if (CurrentPlaylist.CurrentlyPlaying == null)
+                    {
+                        CurrentPlaylist.CurrentlyPlaying = selection;
+                        //me_player.Source = new Uri(CurrentPlaylist.CurrentlyPlaying.Path);
+                    }
+                }
+            }
+        }
+
+        public void AddMediaToCurrentPlaylist(object obj)
+        {
+            if (obj != null)
+            {
+                Model.Media selection = (Model.Media)obj;
+                if (selection != null && PlaylistViewModel.CanAddMedia)
+                {
+                    CurrentPlaylist.AddMedia(selection);
+                    if (CurrentPlaylist.CurrentlyPlaying == null)
+                    {
+                        CurrentPlaylist.CurrentlyPlaying = selection;
+                        //me_player.Source = new Uri(CurrentPlaylist.CurrentlyPlaying.Path);
+                    }
+                }
+            }
         }
 
         #region INotifyPopertyChanged

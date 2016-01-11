@@ -22,8 +22,6 @@ namespace MyWindowsMediaPlayer
     public partial class MainWindow : Window
     {
         ViewModel.MediatechViewModel MediatechViewModel;
-        ViewModel.PlaylistViewModel PlaylistViewModel;
-        ViewModel.PlaylistViewModel CurrentPlaylist;
         System.Timers.Timer Updater;
 
         public MainWindow()
@@ -32,9 +30,7 @@ namespace MyWindowsMediaPlayer
 
             MediatechViewModel = new ViewModel.MediatechViewModel();
             this.DataContext = MediatechViewModel;
-            PlaylistViewModel = new ViewModel.PlaylistViewModel(MediatechViewModel.Medias);
-            this.pnl_medias.DataContext = PlaylistViewModel;
-            CurrentPlaylist = new ViewModel.PlaylistViewModel(MediatechViewModel.CurrentMedias);
+            this.pnl_medias.DataContext = MediatechViewModel.PlaylistViewModel;
             Updater = new System.Timers.Timer();
             Updater.AutoReset = true;
             Updater.Interval = 200;
@@ -57,9 +53,8 @@ namespace MyWindowsMediaPlayer
                         sldr_media_progress.Value = me_player.Position.TotalMilliseconds;
                     }));
             }
-            catch (TaskCanceledException exception)
-            {
-            }
+            catch
+            { }
         }
 
         private void Element_MediaOpened(object sender, EventArgs e)
@@ -74,7 +69,7 @@ namespace MyWindowsMediaPlayer
 
         private void Element_MediaEnded(object sender, EventArgs e)
         {
-            Media toPlay = CurrentPlaylist.NextSong();
+            /*Media toPlay = CurrentPlaylist.NextSong();
             if (toPlay != null)
                 me_player.Source = new Uri(toPlay.Path);
             else
@@ -82,7 +77,7 @@ namespace MyWindowsMediaPlayer
                 isPlaying = false;
                 btn_play.Content = "Play";
                 me_player.Pause();
-            }
+            }*/
         }
 
         bool isPlaying = false;
@@ -102,31 +97,6 @@ namespace MyWindowsMediaPlayer
                 me_player.Pause();
             }
             isPlaying = !isPlaying;
-        }
-
-        private void lstbx_medias_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ListBox lbox = (ListBox)e.Source;
-            Model.Media selection = (Model.Media)lbox.SelectedItem;
-            if (selection != null && PlaylistViewModel.CanAddMedia)
-            {
-                CurrentPlaylist.AddMedia(selection);
-                if (CurrentPlaylist.CurrentlyPlaying == null)
-                {
-                    CurrentPlaylist.CurrentlyPlaying = selection;
-                    me_player.Source = new Uri(CurrentPlaylist.CurrentlyPlaying.Path);
-                }
-            }
-            //this.me_player.Source = new Uri(selection.Path);
-            //this.me_player.Play();
-            //MessageBox.Show(selection.Title);
-        }
-
-        private void lstbx_playlists_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ListBox lbox = (ListBox)e.Source;
-            Model.Playlist selection = (Model.Playlist)lbox.SelectedItem;
-            this.pnl_medias.DataContext = new ViewModel.PlaylistViewModel(selection);
         }
 
         TimeSpan lastPosition = new TimeSpan();

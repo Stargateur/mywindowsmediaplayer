@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyWindowsMediaPlayer"
         xmlns:System="clr-namespace:System;assembly=mscorlib"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
         Title="MyWindowsMediaPlayerV2" Height="900" Width="1200" WindowStartupLocation="CenterScreen" Icon="Menger_sponge.ico">
 
@@ -27,7 +28,12 @@
                         <Button Name="btn_select_file" Command="{Binding AddToMediatech}" Height="{StaticResource ButtonHeight}">Ajouter un média</Button>
                         <Button Height="{StaticResource ButtonHeight}">Lecture en cours</Button>
                         <Button Height="{StaticResource ButtonHeight}">Playlists</Button>
-                        <ListBox Name="lstbx_playlists" ItemsSource="{Binding Playlists}" SelectionChanged="lstbx_playlists_SelectionChanged">
+                        <ListBox Name="lstbx_playlists" ItemsSource="{Binding Playlists}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseUp">
+                                    <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}},Path=DataContext.SelectPlaylist}" CommandParameter="{Binding ElementName=lstbx_playlists,Path=SelectedItem}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock HorizontalAlignment="Center" Text="{Binding Name}"></TextBlock>
@@ -70,7 +76,15 @@
                     <Image Source="C:\Users\Elliott\Documents\Visual Studio 2015\Projects\EpitechTP\MyWindowsMediaPlayerV2\Resources\song.gif" Stretch="None" HorizontalAlignment="Center"></Image>
                 </Grid>
                 <Grid Name="pnl_medias" Visibility="Visible">
-                    <ListBox Name="lstbx_medias" ItemsSource="{Binding Medias}" SelectionChanged="lstbx_medias_SelectionChanged">
+                    <ListBox Name="lstbx_medias" ItemsSource="{Binding Medias}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseDoubleClick">
+                                <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}},Path=DataContext.PlayMedia}" CommandParameter="{Binding ElementName=lstbx_medias,Path=SelectedItem}"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="MouseRightButtonUp">
+                                <i:InvokeCommandAction Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}},Path=DataContext.AddToCurrent}" CommandParameter="{Binding ElementName=lstbx_medias,Path=SelectedItem}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
                         <ListBox.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <UniformGrid VerticalAlignment="Top" Columns="5"/>

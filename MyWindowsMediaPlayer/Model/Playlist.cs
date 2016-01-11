@@ -43,6 +43,11 @@ namespace MyWindowsMediaPlayer.Model
             Medias.Add(media);
         }
 
+        public void ClearMedias()
+        {
+            Medias.Clear();
+        }
+
         public Media NextSong()
         {
             if (currentlyPlaying == null)
