@@ -15,16 +15,23 @@ namespace MyWindowsMediaPlayer.ViewModel
         public Model.Playlist Playlist
         {
             get { return playlist; }
-            set { playlist.CurrentlyPlaying = null; playlist = value; RaisePropertyChanged("Playlist"); RaisePropertyChanged("Medias"); RaisePropertyChanged("CurrentlyPlaying"); }
+            set
+            {
+                if (playlist != null)
+                    CurrentlyPlaying = null;
+                playlist = value;
+                RaisePropertyChanged("Playlist");
+                RaisePropertyChanged("Medias");
+            }
         }
 
         public ObservableCollection<Model.Media> Medias { get { return playlist.Medias; } }
-        public Model.Media CurrentlyPlaying { get { return playlist.CurrentlyPlaying; } set { playlist.CurrentlyPlaying = value; } }
+        public Model.Media CurrentlyPlaying { get { return playlist.CurrentlyPlaying; } set { playlist.CurrentlyPlaying = value; RaisePropertyChanged("CurrentlyPlaying"); } }
         public bool CanAddMedia { get { return playlist.CanAddMedia; } }
 
         public PlaylistViewModel(Model.Playlist playlist)
         {
-            this.playlist = playlist;
+            this.Playlist = playlist;
         }
 
         public void AddMedia(Model.Media media)
@@ -42,7 +49,6 @@ namespace MyWindowsMediaPlayer.ViewModel
         public Model.Media NextSong()
         {
             Model.Media newSong = playlist.NextSong();
-            RaisePropertyChanged("CurrentlyPlaying");
             return newSong;
         }
 

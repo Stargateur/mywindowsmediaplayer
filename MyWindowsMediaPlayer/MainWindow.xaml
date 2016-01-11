@@ -20,13 +20,12 @@
         <Border DockPanel.Dock="Left" Background="AliceBlue" Width="{StaticResource MenuWidth}" Visibility="{Binding Path=isMenuShown, Converter={StaticResource BoolToVis}}">
             <DockPanel LastChildFill="True">
                 <Border DockPanel.Dock="Bottom" Height="{StaticResource BottomMenuHeight}">
-                    <TextBlock Name="txtblc_filename" Text="" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="WrapWithOverflow">
+                    <TextBlock Name="txtblc_filename" Text="{Binding Title}" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="WrapWithOverflow">
                     </TextBlock>
                 </Border>
                 <Border>
                     <StackPanel Orientation="Vertical">
                         <Button Name="btn_select_file" Command="{Binding AddToMediatech}" Height="{StaticResource ButtonHeight}">Ajouter un média</Button>
-                        <Button Height="{StaticResource ButtonHeight}">Lecture en cours</Button>
                         <Button Height="{StaticResource ButtonHeight}" Command="{Binding AddPlaylist}">Playlists</Button>
                         <ListBox Name="lstbx_playlists" ItemsSource="{Binding Playlists}">
                             <i:Interaction.Triggers>
@@ -65,7 +64,7 @@
                         IsMoveToPointEnabled="true" VerticalAlignment="Center"></Slider>
                 <Label Name="lbl_total_time" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center">0:00</Label>
                 <Button Grid.Column="3">Précédent</Button>
-                <Button Name="btn_play" Grid.Column="4" Click="btn_play_Click">Play</Button>
+                <Button Name="btn_play" Grid.Column="4" Command="{Binding TogglePlayPause}" CommandParameter="{Binding ElementName=btn_play}" Content="{Binding PlayPauseContent}"></Button>
                 <Button Grid.Column="5">Suivant</Button>
                 <Slider Name="sldr_volume" ValueChanged="SetVolume" Grid.Column="6" Minimum="0" Maximum="100" Value="50" VerticalAlignment="Center" SmallChange="1" LargeChange="20"></Slider>
             </Grid>
@@ -103,7 +102,6 @@
                     </ListBox>
                 </Grid>
                 <Grid Name="pnl_video" Background="Black" Visibility="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}},Path=DataContext.IsPlayerShown, Converter={StaticResource BoolToVis}}">
-                    <!--<MediaElement LoadedBehavior="Manual"></MediaElement>-->
                     <ContentControl Content="{Binding Player}" />
                 </Grid>
             </Grid>
