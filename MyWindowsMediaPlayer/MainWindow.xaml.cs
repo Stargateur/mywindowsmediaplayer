@@ -31,6 +31,7 @@ namespace MyWindowsMediaPlayer
             MediatechViewModel = new ViewModel.MediatechViewModel();
             this.DataContext = MediatechViewModel;
             this.pnl_medias.DataContext = MediatechViewModel.PlaylistViewModel;
+            this.txtblc_filename.DataContext = MediatechViewModel.CurrentMedia;
             Updater = new System.Timers.Timer();
             Updater.AutoReset = true;
             Updater.Interval = 200;

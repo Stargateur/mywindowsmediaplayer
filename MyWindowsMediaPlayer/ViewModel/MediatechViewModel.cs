@@ -28,7 +28,6 @@ namespace MyWindowsMediaPlayer.ViewModel
         public PlaylistViewModel CurrentPlaylist
         {
             get { return currentPlaylist; }
-            set { currentPlaylist = value; RaisePropertyChanged("CurrentPlaylist"); }
         }
         public PlaylistViewModel PlaylistViewModel
         {
@@ -81,6 +80,7 @@ namespace MyWindowsMediaPlayer.ViewModel
         {
             get { return mediatech.Running; }
         }
+        public MediaViewModel CurrentMedia { get; } = new MediaViewModel();
         #endregion
 
         public MediatechViewModel()
@@ -97,7 +97,8 @@ namespace MyWindowsMediaPlayer.ViewModel
             TogglePlayPause = new RelayCommand(PlayPauseCurrentMedia);
 
             PlaylistViewModel = new PlaylistViewModel(Medias);
-            CurrentPlaylist = new PlaylistViewModel(mediatech.Running);
+            currentPlaylist = new PlaylistViewModel(mediatech.Running);
+            CurrentPlaylist.PropertyChanged += CurrentPlaylist_PropertyChanged;
 
             fd.Title = "Select a media file";
             String mediaExt = "";
@@ -131,6 +132,11 @@ namespace MyWindowsMediaPlayer.ViewModel
             fd.Filter = "Media Files|"+ mediaExt + "|Audio Files|" + audioExt + "|Video Files|" + videoExt + "|Image Files|" + imageExt + "|All Files|*";
             fd.FilterIndex = 1;
             fd.FileOk += Fd_FileOk;
+        }
+
+        private void CurrentPlaylist_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            //RaisePropertyChanged("CurrentMedia");
         }
 
         private void Fd_FileOk(object sender, CancelEventArgs e)
@@ -184,9 +190,7 @@ namespace MyWindowsMediaPlayer.ViewModel
                     if (CurrentPlaylist.CurrentlyPlaying == null)
                     {
                         CurrentPlaylist.CurrentlyPlaying = selection;
-                        Player.Source = new Uri(CurrentPlaylist.CurrentlyPlaying.Path);
-                        isPlaying = false;
-                        PlayPauseCurrentMedia(null);
+                        PlaySong(selection);
                         if (!selection.AudioOnly)
                         {
                             IsPlaylistShown = false;
@@ -208,9 +212,7 @@ namespace MyWindowsMediaPlayer.ViewModel
                     if (CurrentPlaylist.CurrentlyPlaying == null)
                     {
                         CurrentPlaylist.CurrentlyPlaying = selection;
-                        Player.Source = new Uri(CurrentPlaylist.CurrentlyPlaying.Path);
-                        isPlaying = false;
-                        PlayPauseCurrentMedia(null);
+                        PlaySong(selection);
                     }
                 }
             }
@@ -220,7 +222,7 @@ namespace MyWindowsMediaPlayer.ViewModel
         {
             Model.Media toPlay = CurrentPlaylist.NextSong();
             if (toPlay != null)
-                Player.Source = new Uri(toPlay.Path);
+                PlaySong(toPlay);
             else
             {
                 isPlaying = true;
@@ -248,6 +250,17 @@ namespace MyWindowsMediaPlayer.ViewModel
                 PlayPauseContent = "Play";
             }
             isPlaying = !isPlaying;
+        }
+
+        private void PlaySong(Model.Media song)
+        {
+            if (song != null)
+            {
+                Player.Source = new Uri(song.Path);
+                isPlaying = true;
+                Player.Play();
+                CurrentMedia.updateInfos(song);
+            }
         }
 
         #region INotifyPopertyChanged
